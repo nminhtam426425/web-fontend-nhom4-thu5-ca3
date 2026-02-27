@@ -32,7 +32,7 @@ const FormAddUser = ({handleChange,dataEdit,handleUserEdit}) => {
     const handleInsertUser = async () => {
         try {
             if(dataEdit){
-                const response = await fetch(apiUserService+"update",{
+                const response = await fetch(apiUserService.baseURL+"/update",{
                     method:"PUT",
                     headers: {
                         'Content-Type': 'application/json'
@@ -54,7 +54,7 @@ const FormAddUser = ({handleChange,dataEdit,handleUserEdit}) => {
                     alert("Thất bại, "+data.data)
             }
             else{
-                const response = await fetch(apiUserService+"save",{
+                const response = await fetch(apiUserService.baseURL+"/save",{
                     method:"POST",
                     headers: {
                         'Content-Type': 'application/json'

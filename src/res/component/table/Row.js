@@ -1,4 +1,4 @@
-const api = "http://localhost:8081/users/"
+import {apiUserService} from "../index"
 const Row = ({user,countUser,handleChange,handleUserEdit}) => {
     let dataRow = []
 
@@ -10,7 +10,7 @@ const Row = ({user,countUser,handleChange,handleUserEdit}) => {
     const handleDeleteUser = async (user) => {
         
         try {
-            const response = await fetch(api+"delete",{
+            const response = await fetch(apiUserService.baseURL+"/delete",{
                 method:"DELETE",
                 headers: {
                     'Content-Type': 'application/json'

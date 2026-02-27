@@ -12,7 +12,7 @@ const TableUsers = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await fetch(apiUserService)
+                const response = await fetch(apiUserService.baseURL)
                 const data = await response.json()
                 setUsers(data.data)
             } catch (error) {
