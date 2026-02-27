@@ -1,0 +1,29 @@
+
+.tableData{
+    min-width: 350px;
+    max-width: 700px;
+    margin: 0 auto;
+}
+table{
+    border: 1px solid black;
+    border-collapse: collapse;
+}
+tr,th,td{
+    border: 1px solid black;
+}
+
+.btn{
+    cursor: pointer;
+    padding: 3px;
+    border-radius: 5px;
+}
+.bg-danger{
+    color: white;
+    background-color: red;
+    margin-left: 20px;
+}
+.bg-warning{
+    color: black;
+    background-color: yellow;
+    margin-left: 20px;
+}

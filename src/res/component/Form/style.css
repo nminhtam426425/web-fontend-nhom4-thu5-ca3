@@ -1,0 +1,65 @@
+
+.formInsert{
+    min-width: 350px;
+    max-width: 700px;
+    margin: 0 auto;
+    margin-bottom: 20px;
+}
+input[type="text"]{
+    padding: 10px;
+    border-radius: 10px;
+}
+button{
+    width: 100px;
+    font-size: 18px;
+    cursor: pointer;
+    border: 0;
+    background-color: blue;
+    color: white;
+    padding: 10px;
+    border-radius: 10px;
+}
+button:hover{
+    opacity: .6;
+}
+
+/* form  */
+
+.input-group {
+    position: relative;
+    margin-top: 20px;
+    width: 100%;
+}
+
+.input-field {
+    box-sizing: border-box;
+    width: 100%;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    outline: none;
+    font-size: 16px;
+    transition: border-color 0.2s;
+}
+
+.input-field:focus {
+    border: 2px solid #1a73e8;
+}
+
+.input-label {
+    position: absolute;
+    left: 10px;
+    top: 10px;
+    color: #999;
+    background-color: white;
+    padding: 0 2px;
+    transition: 0.2s ease all;
+}
+
+.input-field:focus ~ .input-label, .input-field:not(:placeholder-shown) ~ .input-label{
+    top: -5px;
+    left: 10px;
+    font-size: 12px;
+    color: #1a73e8;
+    font-weight: bold;
+}   
