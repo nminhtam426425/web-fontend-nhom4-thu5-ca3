@@ -1,7 +1,8 @@
 import { useState,useEffect } from "react";
 import "./style.css"
 import {apiUserService} from "../index"
-const FormAddUser = ({handleChange,dataEdit,handleUserEdit}) => {
+
+const FormAddUser = ({dataEdit,setUserEdit,setUsers}) => {
     const [user, setUser] = useState({
         name: "",
         phone: "",
@@ -11,12 +12,11 @@ const FormAddUser = ({handleChange,dataEdit,handleUserEdit}) => {
     useEffect(() => {
         if (dataEdit) {
             setUser({
-                name: dataEdit.name || "",
-                phone: dataEdit.phone || "",
-                email: dataEdit.email || ""
+                name: dataEdit.name,
+                phone: dataEdit.phone,
+                email: dataEdit.email
             });
         } else {
-            // Nếu dataEdit trống (sau khi lưu xong), reset form về rỗng
             setUser({ name: "", phone: "", email: "" });
         }
     }, [dataEdit]); 
@@ -31,48 +31,45 @@ const FormAddUser = ({handleChange,dataEdit,handleUserEdit}) => {
 
     const handleInsertUser = async () => {
         try {
-            if(dataEdit){
-                const response = await fetch(apiUserService.baseURL+"/update",{
-                    method:"PUT",
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body:JSON.stringify({
-                       id:dataEdit.id,
-                       name:user.name,
-                       phone:user.phone,
-                       email:user.email
-                    })
-                })
-                const data = await response.json()
-                if(data.code === 1001){
-                    handleChange()
-                    setUser({ name: "", phone: "", email: "" });
-                    handleUserEdit(null)
+            let userActionInserOrUpdate = {}
+            if(dataEdit)
+                userActionInserOrUpdate.id = dataEdit.id
+
+            userActionInserOrUpdate.name = user.name
+            userActionInserOrUpdate.phone = user.phone
+            userActionInserOrUpdate.email = user.email
+
+            let action = (dataEdit) ? "/update" : "/save"
+
+            const response = await fetch(apiUserService.baseURL+action,{
+                method:(dataEdit) ? "PUT" : "POST",
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body:JSON.stringify(
+                    userActionInserOrUpdate
+                )
+            })
+
+            const data = await response.json()
+            if(data.code === 1001){
+                setUser({ name: "", phone: "", email: "" })
+                if(dataEdit){
+                    setUsers( users => users.map( item => {
+                        if(item.id === data.data.id){
+                            item.name = data.data.name
+                            item.phone = data.data.phone
+                            item.email = data.data.email
+                        }
+                        return item
+                    }))
+                    setUserEdit(null)
                 }
                 else
-                    alert("Thất bại, "+data.data)
+                    setUsers( users => [...users,data.data])
             }
-            else{
-                const response = await fetch(apiUserService.baseURL+"/save",{
-                    method:"POST",
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body:JSON.stringify({
-                       name:user.name,
-                       phone:user.phone,
-                       email:user.email
-                    })
-                })
-                const data = await response.json()
-                if(data.code === 1001){
-                    handleChange()
-                    setUser({ name: "", phone: "", email: "" });
-                }
-                else
-                    alert("Thất bại, "+data.data)
-            }
+            else
+                alert("Thất bại, "+data.data)
         } catch (error) {
             console.error("Lỗi khi thêm dữ liệu:", error)
         }
@@ -98,7 +95,7 @@ const FormAddUser = ({handleChange,dataEdit,handleUserEdit}) => {
                 <label htmlFor="email" className="input-label">Email</label>
             </div>
 
-            <button id="btnSave" style={{display: 'block',margin: '20px auto',width: '20%'}} onClick={handleInsertUser}>Lưu</button>
+            <button id="btnSave" style={{display: 'block',margin: '20px auto',width: '20%',color:'white'}} onClick={handleInsertUser}>Lưu</button>
         </div>  
     </div>
 }
