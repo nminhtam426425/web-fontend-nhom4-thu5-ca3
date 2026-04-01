@@ -1,0 +1,167 @@
+import './styleOfForm.css'
+import { useState,useEffect } from 'react'
+import {useBranch,apiUserService} from "../index"
+
+const FormStaff = ({data,setDataItem,setDatas,roleForCreate}) => {
+    const {setIsLoading} = useBranch()
+    const closeModal = () => {
+        setDataItem(null)
+    }
+    const [staff, setStaff] = useState({
+        username:"",
+        password:"",
+        fullName: "",
+        phone: "",
+        email: "",
+        address:"",
+        review_avatar:""
+
+    })
+    useEffect(() => {
+        if (data) {
+            setStaff({
+                username: data.username || "",
+                password: data.password || "",
+                fullName: data.fullName || "",
+                phone: data.phone || "",
+                email: data.email || "",
+                address: data.address || ""
+            });
+        } else {
+            // Nếu data trống (sau khi lưu xong), reset form về rỗng
+            setStaff({ username: "", password: "",fullName:"", phone: "",email:"",address:"" });
+        }
+    }, [data]); 
+
+    const handleInputChange = (e) => {
+        const { id, value } = e.target
+        setStaff({
+            ...staff,
+            [id]: value 
+        })
+    }
+
+    const handleImageChange = (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            URL.revokeObjectURL(staff.review_avatar)
+            setStaff({
+                ...staff,
+                review_avatar: URL.createObjectURL(file)
+            })
+        }
+    }
+
+    let {selectedBranchId} = useBranch()
+    const handleAddStaff = async () => {
+        try{
+            let url = (roleForCreate) ? '/users/save' : `/staff?branchId=${selectedBranchId}`
+            let objectForAction = {}
+            // tao user hay staff phu thuoc vao bien roleForCreate - true tao user, nguoc lai tao staff
+            if(roleForCreate){
+                objectForAction = {
+                    username:staff.username,
+                    password:staff.password,
+                    fullName:staff.fullName,
+                    phone:staff.phone,
+                    email:staff.email,
+                    address:staff.address,
+                    roleId:3,
+                    isActive:true
+                }
+            }
+            else{
+                objectForAction = {
+                    username:staff.username,
+                    password:staff.password,
+                    fullName:staff.fullName,
+                    phone:staff.phone,
+                    email:staff.email,
+                    address:staff.address
+                }
+            }
+            setIsLoading(true)
+            const res = await fetch(apiUserService.baseURL+url,{
+                method:'POST',
+                headers:{
+                    'Content-Type': 'application/json'
+                },
+                body:JSON.stringify(objectForAction)
+            })
+            if(res.ok){
+                setIsLoading(false)
+                const data = await res.json()
+                if(data.code === 1001){
+                    staff.isActive = true
+                    setDatas(staffs => [...staffs,staff])
+                    setDataItem(null)
+                }
+                else{
+                    setDataItem(null)
+                    alert(data.data)
+                }
+            }
+            else{
+                setIsLoading(false)
+            }
+        }
+        catch(err){
+            setIsLoading(false)
+            console.log("loi khi them staff or user")
+        }
+    }
+
+    if(data)
+        return <>
+            <div className="modal-content">
+                <span className="close" onClick={closeModal}>&times;</span>
+                <h3 id="modal-title">Chỉnh sửa thông tin</h3>
+                <form id="account-form">
+                    <div className="avatar-upload">
+                        <img id="review_avatar" alt="Avatar" src={staff.review_avatar || "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSN6WpyGdYzwEFBXQm-nXaTfIXcPH1IB1hGWw&s"}/>
+                        <br/>
+                        <input type="file" id="input-avatar" accept="image/*" onChange={handleImageChange}/>
+                    </div>
+
+                    <div className="input-group" style={{width:'100%'}}>
+                        <input type="text" id="username" className="input-field" placeholder="" value={staff.username} onChange={handleInputChange}/>
+                        <label htmlFor="username" className="input-label">Tên đăng nhập</label>
+                    </div>
+
+                    <div className="input-group" style={{width:'100%'}}>
+                        <input type="password" id="password" className="input-field" placeholder="" value={staff.password} onChange={handleInputChange}/>
+                        <label htmlFor="password" className="input-label">Mật khẩu</label>
+                    </div>
+                    
+                    <div className="input-group" style={{width:'100%'}}>
+                        <input type="text" id="fullName" className="input-field" placeholder="" value={staff.fullName} onChange={handleInputChange}/>
+                        <label htmlFor="fullName" className="input-label">Họ và tên</label>
+                    </div>
+
+                    <div className="form-row">
+                        <div className="input-group" style={{width:'100%'}}>
+                            <input type="text" id="phone" className="input-field" placeholder="" value={staff.phone} onChange={handleInputChange}/>
+                            <label htmlFor="name" className="input-label">Số điện thoại</label>
+                        </div>
+                        <div className="input-group" style={{width:'100%'}}>
+                            <input type="text" id="email" className="input-field" placeholder="" value={staff.email} onChange={handleInputChange}/>
+                            <label htmlFor="name" className="input-label">Email</label>
+                        </div>
+                    </div>
+
+                    <div className="input-group" style={{width:'100%'}}>
+                        <input type="text" id="address" className="input-field" placeholder="" value={staff.address} onChange={handleInputChange}/>
+                        <label htmlFor="name" className="input-label">Địa chỉ</label>
+                    </div>
+
+                    <div className="form-actions">
+                        <button type="button" className="btn btn-save" onClick={handleAddStaff}>Lưu</button>
+                        <button type="button" className="btn btn-cancel" onClick={closeModal}>Hủy</button>
+                    </div>
+                </form>
+            </div>
+         </>
+    else
+        return <></>
+}
+export default FormStaff

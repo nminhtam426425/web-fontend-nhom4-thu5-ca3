@@ -1,7 +1,7 @@
-import {TableUsers} from '../component'
+import {MainHome} from "../component"
 const Home = () => {
     return <>
-        <TableUsers/>
+        <MainHome/>
     </>
 }
 export default Home

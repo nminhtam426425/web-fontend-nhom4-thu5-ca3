@@ -1,0 +1,133 @@
+:root {
+    --primary: #2c3e50;
+    --success: #27ae60;
+    --info: #3498db;
+    --danger: #e74c3c;
+    --light: #f4f7f6;
+}
+.container-2 {width: 100%; margin: 20px auto; background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+
+/* Header & Stats */
+.header-section { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; border-bottom: 2px solid #eee; padding-bottom: 20px; }
+.stats-cards { display: flex; gap: 20px; }
+.card { background: var(--primary); color: white; padding: 15px 25px; border-radius: 8px; text-align: center; }
+.card h3 { margin: 0; font-size: 14px; opacity: 0.8; }
+.card p { margin: 5px 0 0; font-size: 20px; font-weight: bold; }
+
+/* Tables */
+.section-header { display: flex; justify-content: space-between; align-items: center; margin-top: 20px; }
+table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+th, td { border: 1px solid #ddd; padding: 12px; text-align: left; }
+th { background-color: #f8f9fa; }
+img { border-radius: 4px; object-fit: cover; }
+
+/* Buttons */
+.btn { border: none; padding: 8px 15px; border-radius: 4px; cursor: pointer; color: white; font-weight: 500; }
+.btn-primary { background: var(--primary); }
+.btn-info { background: var(--info); }
+.btn-success { background: var(--success); }
+.btn-danger { background: var(--danger); }
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+.detail-section { animation: fadeIn 0.5s; }
+
+.branch-gallery-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+    margin: 20px 0;
+    padding: 10px 40px;
+    background: #fff;
+    border-radius: 8px;
+}
+
+.gallery-viewport {
+    overflow: hidden;
+    width: 100%;
+}
+
+.gallery-track {
+    display: flex;
+    gap: 15px;
+    transition: transform 0.4s ease-in-out;
+}
+
+.gallery-item {
+    flex: 0 0 calc(33.333% - 10px); 
+    min-width: 0;
+}
+
+.gallery-item img {
+    width: 100%;
+    height: 150px;
+    object-fit: cover;
+    border-radius: 6px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.gallery-item img:hover{
+    cursor: pointer;
+}
+
+/* Nút mũi tên */
+.nav-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(44, 62, 80, 0.8);
+    color: white;
+    border: none;
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    cursor: pointer;
+    z-index: 5;
+}
+
+.nav-btn:hover { background: #3498db; }
+.prev { left: 0; }
+.next { right: 0; }
+.detail-price{
+    display: flex;
+    justify-content: space-around;
+}
+/* input form */
+.input-price {
+    position: relative;
+    margin-top: 20px;
+    min-width: 100px;
+}
+
+.input-field {
+    box-sizing: border-box;
+    width: 100%;
+    padding: 10px;
+    margin: 2px 0;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    outline: none;
+    font-size: 16px;
+    transition: border-color 0.2s;
+}
+
+.input-field:focus {
+    border: 2px solid #1a73e8;
+}
+
+.input-label {
+    position: absolute;
+    left: 10px;
+    top: 10px;
+    color: #999;
+    background-color: white;
+    padding: 0 2px;
+    transition: 0.2s ease all;
+}
+
+.input-field:focus ~ .input-label, .input-field:not(:placeholder-shown) ~ .input-label{
+    top: -5px;
+    left: 10px;
+    font-size: 12px;
+    color: #1a73e8;
+    font-weight: bold;
+}   
