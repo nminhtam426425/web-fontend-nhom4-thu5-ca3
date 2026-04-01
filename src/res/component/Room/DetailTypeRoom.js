@@ -3,12 +3,13 @@ import BranchGallery from "./BranchGallery"
 import "./styleOfRoom.css"
    
 const DetailTypeRoom = ({isClick,setRoom,setSrcImage,data}) => {
-    const [setPrice] = useState({
+    const [price,setPrice] = useState({
         basePrice:0,
         sundayPrice:0,
         peakPrice:0,
         peakSundayPrice:0
     })
+    console.log(price)
     useEffect(()=>{
         if(data)
             setPrice({
