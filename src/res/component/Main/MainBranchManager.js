@@ -34,7 +34,7 @@ const MainStaffManager = () => {
             }
         }
         fetchData()
-    },[])
+    },[setIsLoading])
 
     return <div>
         <div className='container'>

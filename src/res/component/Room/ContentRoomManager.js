@@ -33,7 +33,7 @@ const ContentRoomManager = () => {
            }
         }
         handleFecthRoomType()
-    },[])
+    },[setIsLoading])
 
     return <>
         <div className="container-2">

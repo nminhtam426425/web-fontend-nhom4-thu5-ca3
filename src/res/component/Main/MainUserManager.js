@@ -40,7 +40,7 @@ const MainUserManager = () => {
             }
         }
         handleFetchStaffs()
-    },[])
+    },[setIsLoading])
     
     return <div>
         <div className='container'>

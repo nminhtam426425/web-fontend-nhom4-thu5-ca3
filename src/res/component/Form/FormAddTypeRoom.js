@@ -6,6 +6,7 @@ const FormAddStyleRoom = ({setDataItem}) => {
     const [amenities,setAmneities] = useState([])
     let amenitiesForCreate =[]
     const {setIsLoading} = useBranch()
+
     useEffect(() => {
         const handleFetchAmenities = async ()  => {
             try{
@@ -25,7 +26,7 @@ const FormAddStyleRoom = ({setDataItem}) => {
             }
         }
         handleFetchAmenities()
-    },[])
+    },[setIsLoading])
 
     const handleAddTyoeRoom = async () => {
         // try{

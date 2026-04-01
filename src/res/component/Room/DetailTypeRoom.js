@@ -3,7 +3,7 @@ import BranchGallery from "./BranchGallery"
 import "./styleOfRoom.css"
    
 const DetailTypeRoom = ({isClick,setRoom,setSrcImage,data}) => {
-    const [price,setPrice] = useState({
+    const [setPrice] = useState({
         basePrice:0,
         sundayPrice:0,
         peakPrice:0,
@@ -17,7 +17,7 @@ const DetailTypeRoom = ({isClick,setRoom,setSrcImage,data}) => {
                 peakPrice:data.pricePeakSeason || 0,
                 peakSundayPrice:data.pricePeakSunday || 0
             })
-    },[data])
+    },[data,setPrice])
     return <>
             <section className="detail-section" style={{ display: isClick !== -1 ? 'block' : 'none'}}>
                 <hr/>

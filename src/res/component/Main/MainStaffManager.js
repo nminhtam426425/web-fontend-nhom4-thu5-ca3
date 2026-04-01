@@ -42,7 +42,7 @@ const MainStaffManager = () => {
             }
         }
         handleFetchStaffs()
-    },[])
+    },[selectedBranchId,setIsLoading])
     return <div>
         <div className='container'>
             <Sidebar/>

@@ -30,7 +30,7 @@ const MainServiceManager = () => {
             }
         }
         handleFetchService()
-    },[])
+    },[setIsLoading])
 
     return <div>
         <div className="container">
