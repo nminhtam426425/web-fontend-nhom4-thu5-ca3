@@ -23,13 +23,13 @@ ChartJS.register(
   Filler
 );
 
-const Chart = () => {
+const Chart = ({dataRevenue}) => {
   const data = {
-    labels: ['Thứ 2', 'Thứ 3', 'Thứ 4', 'Thứ 5', 'Thứ 6', 'Thứ 7', 'Chủ Nhật'],
+    labels: dataRevenue.dayRevenue,
     datasets: [
       {
         label: 'Doanh thu (Triệu VNĐ)',
-        data: [12, 19, 15, 25, 22, 30, 28],
+        data: dataRevenue.revenueLast7Day,
         backgroundColor: 'rgba(52, 152, 219, 0.2)',
         borderColor: 'rgba(52, 152, 219, 1)',
         borderWidth: 3,

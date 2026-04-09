@@ -153,3 +153,66 @@ input[type="text"] { width: 100%; padding: 10px; margin-bottom: 10px; }
     font-size: 18px;
     color: #ddd;
 }
+
+.container-manager-image { 
+    max-width: 900px; 
+    max-height:250px ; 
+    background: white; 
+    padding: 20px; 
+    border-radius: 8px; 
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    overflow: scroll; 
+}
+
+.actions { 
+    margin-bottom: 20px; 
+}
+
+.btn { 
+    padding: 10px 15px;
+    border: none;
+    border-radius: 4px; 
+    cursor: pointer; 
+    font-weight: bold; 
+}
+
+.btn-add {
+    background: #28a745; 
+    color: white; 
+}
+
+.btn-delete { 
+    background: #dc3545; 
+    color: white; 
+    padding: 5px 10px; 
+}
+
+table { 
+    width: 100%;
+    border-collapse: collapse; 
+    margin-top: 10px; 
+}
+th, td { 
+    border: 1px solid #ddd;
+    padding: 12px; 
+    text-align: center;
+}
+th { 
+    background-color: #f8f9fa;
+}
+.img-preview {
+    width: 60px;
+    height: 60px; 
+    object-fit: cover;
+    border-radius: 4px;
+    border: 1px solid #eee;
+}
+.img-preview:hover{
+    cursor: pointer;
+}
+.detail-price{
+    display: flex;
+    justify-content: space-around;
+    gap: 5px;
+    margin-top: 20px;
+}

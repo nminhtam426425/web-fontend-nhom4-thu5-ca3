@@ -37,3 +37,102 @@ th {
 .btn-unlock { background: yellow; color: black; width: 100px; }
 .btn-cancel { background: #95a5a6; color: white; width: 100px; }
 
+.booking-detail-container {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    min-width: 600px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+
+.customer-info-card {
+    background: #ffffff;
+    padding: 20px;
+    border-radius: 10px;
+    margin-bottom: 25px;
+    border-left: 5px solid #2c3e50;
+    border-right: 5px solid #2c3e50;
+}
+
+.title {
+    margin-top: 0;
+    color: #2c3e50;
+    font-size: 1.5rem;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 10px;
+}
+
+.info-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 15px;
+    margin-top: 15px;
+}
+
+.info-item .label {
+    display: block;
+    font-size: 0.85rem;
+    color: #7f8c8d;
+    font-weight: 600;
+}
+
+.info-item .value {
+    font-size: 1.1rem;
+    color: #2c3e50;
+    font-weight: 500;
+}
+
+.badge-gold {
+    color: #d4af37 !important;
+    font-weight: bold;
+}
+
+.total-amount {
+    color: #e74c3c !important;
+    font-weight: bold;
+}
+
+.booking-list-section {
+    background: #ffffff;
+    padding: 20px;
+    border-radius: 10px;
+}
+
+.subtitle {
+    color: #34495e;
+    margin-bottom: 15px;
+}
+
+.table-responsive {
+    overflow-x: auto;
+}
+
+.booking-table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+}
+
+.booking-table th {
+    background-color: #f8f9fa;
+    color: #333;
+    padding: 12px;
+    border-bottom: 2px solid #dee2e6;
+}
+
+.booking-table td {
+    padding: 12px;
+    border-bottom: 1px solid #eee;
+    color: #555;
+}
+
+.booking-table tr:hover {
+    background-color: #f1f4f7;
+}
+
+.rating-star {
+    color: #f1c40f;
+    font-weight: bold;
+}

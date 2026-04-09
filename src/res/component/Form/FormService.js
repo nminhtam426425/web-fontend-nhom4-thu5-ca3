@@ -35,8 +35,8 @@ const FormService = ({data,setDataItem,setDatas}) => {
             let method = ""
             let conditionUrl = ""
 
-            conditionUrl = (data?.id) ?   `/amenities/${data.id}` : `/amenities`
-            method = (data?.id) ? 'PUT' : 'POST'
+            conditionUrl = (data?.idAmenities) ?   `/amenities/${data.idAmenities}` : `/amenities`
+            method = (data?.idAmenities) ? 'PUT' : 'POST'
             setIsLoading(true)
             const res =  await fetch(apiUserService.baseURL+conditionUrl,{
                 method: method,  
@@ -48,10 +48,10 @@ const FormService = ({data,setDataItem,setDatas}) => {
 
             if(res.ok){
                 setIsLoading(false)
-                if(data?.id){
+                if(data?.idAmenities){
                     const data = await res.json()
                     setDatas(services => services.map( item => {
-                        if(item.id === data.id)
+                        if(item.idAmenities === data.idAmenities)
                             item.description = data.description
                         return item
                     }))

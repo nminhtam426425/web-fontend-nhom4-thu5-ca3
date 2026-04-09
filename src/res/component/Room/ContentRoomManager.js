@@ -1,39 +1,68 @@
 import "./styleOfRoom.css"
-import {SelectBranch} from "../Dash"
+import {SelectBranch,PrintAmountVND} from "../Dash"
 import RowTableTypeRoom from "./RowTableTypeRoom"
 import DetailTypeRoom from "./DetailTypeRoom"
 import Modal from "../Form/Modal"
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import {apiUserService,useBranch} from "../index"
 
 const ContentRoomManager = () => {
     const [isClick,setIsClick] = useState(-1)
     const [typeRoom,setTypeRoom] = useState(null)
     const [room,setRoom] = useState(null)
+    const [roomsOfType,setRoomsOfType] = useState([])
     const [srcImage,setSrcImage] = useState(null)
     const [roomTypes,setRoomTypes] = useState([])
-    const {isLoading,setIsLoading} = useBranch()
+    const [state,setState] = useState('detail')
+    const [dataDetail,setDataDetail] = useState({})
+    const {isLoading,setIsLoading,selectedBranchId,setCurrentScroll} = useBranch()
+    let revenueBranch = useRef(0)
+    let totalRoomAtBranch = useRef(0)
+
+    const propsOfDetailRoom = {
+        isClick,
+        roomsOfType,
+        state,
+        roomTypes,
+        setRoomTypes,
+        setSrcImage,
+        setRoomsOfType,
+        setRoom,
+        setDataDetail
+    }
 
     useEffect(()=>{
         const handleFecthRoomType = async () => {
             try{
+                let url = (selectedBranchId) ? `/roomtypes/by-branch/${selectedBranchId}` : '/roomtypes/by-branch/1'
                 setIsLoading(true)
-                const res = await fetch(apiUserService.baseURL+'/roomtypes')
+                const res = await fetch(apiUserService.baseURL+url)
                 if(res.ok){
                     setIsLoading(false)
                     const data = await res.json()
-                    setRoomTypes(data)
+                    setRoomTypes(data.data)
+
+                    setCurrentScroll(0)
+
+                    revenueBranch.current = 0;
+                    totalRoomAtBranch.current = 0;
+        
+                    for (let i of data.data) {
+                        revenueBranch.current += i?.revenue || 0;
+                        totalRoomAtBranch.current += i?.totalRooms || 0;
+                    }
+                        
                 }
                 else
                     setIsLoading(false)
             }
            catch(err){
-                console.log("loi khi lay du lieu roomtypes")
+                console.log("loi khi lay du lieu roomtypes",err)
                 setIsLoading(false)
            }
         }
         handleFecthRoomType()
-    },[setIsLoading])
+    },[setIsLoading,selectedBranchId,setCurrentScroll])
 
     return <>
         <div className="container-2">
@@ -43,11 +72,13 @@ const ContentRoomManager = () => {
                 <div className="stats-cards">
                     <div className="card">
                         <h3>Tổng số phòng</h3>
-                        <p id="totalRooms">24</p>
+                        <p id="totalRooms">{totalRoomAtBranch.current}</p>
                     </div>
                     <div className="card">
                         <h3>Tổng doanh thu</h3>
-                        <p id="totalRevenue">150,000,000 VNĐ</p>
+                        <p id="totalRevenue">
+                            <PrintAmountVND amount={revenueBranch.current || 0}/>
+                        </p>
                     </div>
                 </div>
             </section>
@@ -71,18 +102,27 @@ const ContentRoomManager = () => {
 
                     <tbody id="roomTypeBody">
                         {
-                            roomTypes.map( (item,index) => <RowTableTypeRoom setIsClick={setIsClick} index={index} data={item} setRoomTypes={setRoomTypes} key={index} />)
+                            roomTypes.map( (item,index) => 
+                                    <RowTableTypeRoom  index={index} data={item}
+                                        setIsClick={setIsClick} 
+                                        setRoomTypes={setRoomTypes}
+                                        roomTypes={roomTypes} 
+                                        setDataDetail={setDataDetail}
+                                        key={index} 
+                                        setCurrentScroll={setCurrentScroll}
+                                        setState={setState}/>
+                            )
                         }
                     </tbody>
                 </table>
             </section>
                 
-            <DetailTypeRoom isClick={isClick} setRoom={setRoom} setSrcImage={setSrcImage} data={roomTypes[isClick]}/>
+            <DetailTypeRoom dataDetail={dataDetail} {...propsOfDetailRoom}/>
         </div>
-        <Modal styleModal="addTypeRoom" data={typeRoom} setDataItem={setTypeRoom}/>
-        <Modal styleModal="addRoom" data={room} setDataItem={setRoom}/>
+        <Modal styleModal="addTypeRoom" data={typeRoom} setDataItem={setTypeRoom} setDatas={setRoomTypes}/>
+        <Modal styleModal="addRoom" data={room} setDataItem={setRoom} setDatas={setRoomsOfType}/>
         <Modal styleModal="showImage" data={srcImage} setDataItem={setSrcImage}/>
-        <Modal styleModal="loading" data={isLoading} setDataItem={setIsLoading} message="Đang tải dữ liệu, vui lòng chờ"/>
+        <Modal styleModal="loading" data={isLoading} setDataItem={setIsLoading} message="Đang xử lý dữ liệu, vui lòng chờ"/>
    </>
 }
 export default ContentRoomManager

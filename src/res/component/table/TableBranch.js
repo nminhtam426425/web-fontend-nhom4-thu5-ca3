@@ -1,7 +1,8 @@
 import './styleOfTable.css'
 import RowTableBranch from "./RowTableBranch.js"
-import {SelectBranch} from "../Dash"
 import { FaPlus} from "react-icons/fa"
+import {useBranch,apiUserService} from "../index"
+import { useState } from 'react'
 
 const temp = {
     add:true,
@@ -13,10 +14,42 @@ const temp = {
     isActive: true
 }
 
-const TableBranch = ({dataOfBranch,setDataItem,setDataOfBranch}) => {
+const TableBranch = ({dataOfBranch,setDataItem,setDataOfBranch,dataOfBranchActive,setDataOfBranchActive}) => {
+    const {setIsLoading} = useBranch()
+    const [branchDisable,setBranchDisable] = useState(false)
     const handleOpenModalStaff = () => {
         setDataItem(temp)
     }
+    const props = {
+        setDataItem,
+        setDataOfBranch,
+        setDataOfBranchActive
+    }
+
+    const handleChangeBranchDiasable = async (e) => {
+        let isChange = e.target.checked
+        setBranchDisable(isChange)
+        if(isChange){
+            try{
+                setIsLoading(true)
+                const res = await fetch(apiUserService.baseURL+'/branches/disabled')
+                if(res.ok){
+                    setIsLoading(false)
+                    const data = await res.json()
+                    setDataOfBranch(data)
+                }
+                else
+                    setIsLoading(false)
+            }
+            catch(err){
+                setIsLoading(false)
+                console.log("fail to get data user disable")
+            }
+        }
+        else
+            setDataOfBranch(dataOfBranchActive)
+    }
+
     return <>
         <div>
             <header>
@@ -27,8 +60,8 @@ const TableBranch = ({dataOfBranch,setDataItem,setDataOfBranch}) => {
             </header>
 
             <section className="table-container">
-                <SelectBranch/>
-                <input type="checkbox" style={{marginRight:'5px'}}/>Chi nhánh đã ẩn:
+                <input type="checkbox"  id="branchDisable" style={{marginRight:'5px'}} checked={branchDisable} onChange={handleChangeBranchDiasable}/>
+                <label htmlFor='branchDisable'>Chi nhánh đã ẩn:</label>
                 <table id="data-table">
                     <thead>
                         <tr>
@@ -42,7 +75,7 @@ const TableBranch = ({dataOfBranch,setDataItem,setDataOfBranch}) => {
                     </thead>
                     <tbody id="table-body">
                         {
-                            dataOfBranch.map( (item,index) => <RowTableBranch branchItem={item} key={index} index={index} setDataItem={setDataItem} setDataOfBranch={setDataOfBranch}/>)
+                            dataOfBranch.map( (item,index) => <RowTableBranch branchItem={item} key={index} index={index} {...props}/>)
                         }
                     </tbody>
                 </table>

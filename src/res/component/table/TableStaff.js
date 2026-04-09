@@ -13,8 +13,8 @@ const temp = {
     email: "staff@gmail.com",
     address: "HCM",
     add:true
-  
 }
+
 const TableStaff = ({dataOfStaff,setDataItem,setDataOfStaff,dataOfStaffActive,setDataOfStaffActive}) => {
     const [staffDisable,setStaffDisable] = useState(false)
     const {setIsLoading} = useBranch()
@@ -60,8 +60,9 @@ const TableStaff = ({dataOfStaff,setDataItem,setDataOfStaff,dataOfStaffActive,se
             </header>
 
             <section className="table-container">
-                <SelectBranch setDataOfStaff={setDataOfStaff} setDataOfStaffActive={setDataOfStaffActive}/>
-                <input type="checkbox" style={{marginRight:'5px'}} checked={staffDisable} onChange={handleChangeStaffDiasable}/>Nhân viên đang bị khóa:
+                <SelectBranch/>
+                <input type="checkbox" id="disable-staff" style={{marginRight:'5px'}} checked={staffDisable} onChange={handleChangeStaffDiasable}/>
+                <label htmlFor="disable-staff">Nhân viên đang bị khóa:</label>
                 <table id="data-table">
                     <thead>
                         <tr>

@@ -91,13 +91,13 @@ const FormStaff = ({data,setDataItem,setDatas,roleForCreate}) => {
             if(res.ok){
                 setIsLoading(false)
                 const data = await res.json()
+                staff.isActive = true
+                staff.userId = data.data.id
                 if(data.code === 1001){
-                    staff.isActive = true
                     setDatas(staffs => [...staffs,staff])
                     setDataItem(null)
                 }
                 else{
-                    setDataItem(null)
                     alert(data.data)
                 }
             }

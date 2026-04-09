@@ -10,19 +10,22 @@ const MainStaffManager = () => {
     const [dataOfBranch,setDataOfBranch] = useState([])
     const [dataItem,setDataItem] = useState(null)
     const {isLoading,setIsLoading} = useBranch()
+    const [dataOfBranchActive,setDataOfBranchActive] = useState([])
     const props = {
-        dataOfBranch
+        dataOfBranch,
+        dataOfBranchActive,
+        setDataOfBranchActive
     }
     useEffect(()=>{
-       
         const fetchData = async () => {
             try{
                 setIsLoading(true)
                 const res = await fetch(apiUserService.baseURL + "/branches")
                 if (res.ok) {
-                    const json = await res.json() 
+                    const data = await res.json() 
                     setIsLoading(false)
-                    setDataOfBranch(json)
+                    setDataOfBranch(data)
+                    setDataOfBranchActive(data)
                 }
                 else{
                     setIsLoading(false)

@@ -12,7 +12,8 @@ const FormStaff = ({data,setDataItem,setDatas}) => {
         phone: "",
         email: "",
         address:"",
-        review_avatar:""
+        review_avatar:"",
+        username:""
 
     })
 
@@ -23,7 +24,8 @@ const FormStaff = ({data,setDataItem,setDatas}) => {
                 phone: data.phone || "",
                 email: data.email || "",
                 address: data.address || "",
-                review_avatar: data.src || ""
+                review_avatar: data.src || "",
+                username: data.username || ""
             });
         } else {
             // Nếu dataEdit trống (sau khi lưu xong), reset form về rỗng
@@ -59,7 +61,7 @@ const FormStaff = ({data,setDataItem,setDatas}) => {
                 body:JSON.stringify({
                     id:data.userId,
                     username: data.username,
-                    password: data.password,
+                    password: "",
                     fullName: staff.fullname,
                     email: staff.email,
                     phone: staff.phone,
@@ -68,7 +70,7 @@ const FormStaff = ({data,setDataItem,setDatas}) => {
                     isActive: true
                 })
             })
-
+            console.log(data)
             if(res.ok){
                 setIsLoading(false)
                 const data = await res.json()
@@ -103,6 +105,11 @@ const FormStaff = ({data,setDataItem,setDatas}) => {
                         <img id="review_avatar" alt="Avatar" src={staff.review_avatar || "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSN6WpyGdYzwEFBXQm-nXaTfIXcPH1IB1hGWw&s"}/>
                         <br/>
                         <input type="file" id="input-avatar" accept="image/*" onChange={handleImageChange}/>
+                    </div>
+
+                    <div className="input-group" style={{width:'100%'}}>
+                        <input type="text" id="username" className="input-field" placeholder="" value={staff.username} readOnly/>
+                        <label htmlFor="username" className="input-label">Tên đăng nhập</label>
                     </div>
                     
                     <div className="input-group" style={{width:'100%'}}>

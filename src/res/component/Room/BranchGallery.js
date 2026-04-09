@@ -1,10 +1,11 @@
+import { useBranch } from '../index';
 import './styleOfRoom.css'
-import React, { useState, useRef } from 'react';
+import React, { useRef } from 'react';
 
 const BranchGallery = ({setSrcImage,images}) => {
-    const [currentScroll, setCurrentScroll] = useState(0);
     const trackRef = useRef(null);
     const viewportRef = useRef(null);
+    const {currentScroll,setCurrentScroll} = useBranch()
 
     const scrollGallery = (direction) => {
       const track = trackRef.current;
@@ -39,7 +40,7 @@ const BranchGallery = ({setSrcImage,images}) => {
                 {
                     images.map((img, index) => (
                         <div key={index} className="gallery-item">
-                            <img src={img} alt={"anh "+index} onClick={() => openImage(img)}  />
+                            <img src={img.imageUrl} alt={"anh "+index} onClick={() => openImage(img.imageUrl)}  />
                         </div>
                     ))
                 }

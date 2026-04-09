@@ -1,19 +1,8 @@
 import './styleOfForm.css'
 import { useState,useEffect } from 'react'
 import {apiUserService,useBranch} from "../index"
+import { MemberShipLevel } from '../Dash'
 
-const MemberShipLevel = (amount) => {
-    if(amount > 20000000)
-        return  "Daddy - Đã chi: " + amount.toLocaleString('vi-VN') + 'đ'
-    else if(amount > 10000000)
-        return "VIP - Đã chi: " + amount.toLocaleString('vi-VN') + 'đ'
-    else if(amount > 1000000)
-        return "Bạn mới - Đã chi: " + amount.toLocaleString('vi-VN') + 'đ'
-    else if(amount > 0)
-        return "Thành viên - Đã chi: " + amount.toLocaleString('vi-VN') + 'đ'
-    
-    return "Thành viên mới - Đã chi: " + amount.toLocaleString('vi-VN') + 'đ'
-}
 const FormUser = ({data,setDataItem,setDatas}) => {
     const {setIsLoading} = useBranch()
     const closeModal = () => {
@@ -62,6 +51,7 @@ const FormUser = ({data,setDataItem,setDatas}) => {
         }
     }
     const handleUpdateUser = async () => {
+        console.log(data)
         try{
             setIsLoading(true)
             const res = await fetch(apiUserService.baseURL+"/users/update",{
@@ -72,7 +62,7 @@ const FormUser = ({data,setDataItem,setDatas}) => {
                 body:JSON.stringify({
                     id:data.userId,
                     username: data.username,
-                    password: data.password,
+                    password: "",
                     fullName: staff.fullname,
                     email: staff.email,
                     phone: staff.phone,
@@ -81,7 +71,7 @@ const FormUser = ({data,setDataItem,setDatas}) => {
                     isActive: true
                 })
             })
-
+            console.log(data)
             if(res.ok){
                 setIsLoading(false)
                 const data = await res.json()

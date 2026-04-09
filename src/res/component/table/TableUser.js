@@ -13,11 +13,14 @@ const temp = {
     address: "HCM",
     add:true
 }
-const TableUser = ({dataOfUser,setDataItem,setDataOfUser,dataOfUserActive,setDataOfUserActive}) => {
+const TableUser = ({dataOfUser,setDataItem,setDataOfUser,dataOfUserActive,setDataOfUserActive,setDetailOfUser,setIsClick}) => {
     const props = {
             setDataItem,
             setDataOfUser,
-            setDataOfUserActive
+            setDataOfUserActive,
+            setDetailOfUser,
+            setIsClick
+    
     }
     const {setIsLoading} = useBranch()
     const [userDisable,setUserDisable] = useState(false)
@@ -59,7 +62,8 @@ const TableUser = ({dataOfUser,setDataItem,setDataOfUser,dataOfUserActive,setDat
             </header>
 
             <section className="table-container">
-                <input type="checkbox" name="" checked={userDisable} onChange={handleChangeUserDiasable} id="" style={{marginRight:'5px'}}/>Tài khoản đã ngừng kích hoạt:
+                <input type="checkbox" name="" checked={userDisable} onChange={handleChangeUserDiasable} id="disable-user" style={{marginRight:'5px'}}/>
+                <label htmlFor="disable-user">Tài khoản đã ngừng kích hoạt:</label>
                 <table id="data-table">
                     <thead>
                         <tr>

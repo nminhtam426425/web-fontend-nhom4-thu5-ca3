@@ -6,24 +6,25 @@ const RowTableUser = ({dataItem,index,setDataItem,setDataOfService}) => {
     const {setIsLoading} = useBranch()
 
     const handleDeleteAmenities = async () => {
-        try{
-            setIsLoading(true)
-            const res = await fetch(apiUserService.baseURL+`/amenities/${dataItem.id}`,{
-                method:'DELETE',
-                headers: {
-                    'Content-Type': 'application/json'
+        if(window.confirm("Bạn chắc chắn muốn xóa không ?")){
+            try{
+                setIsLoading(true)
+                const res = await fetch(apiUserService.baseURL+`/amenities/${dataItem.idAmenities}`,{
+                    method:'DELETE',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                })
+                
+                setIsLoading(false)
+                if(res.ok){
+                    setDataOfService( services => services.filter( item => item.idAmenities !== dataItem.idAmenities) )
                 }
-            })
-            if(res.ok){
-                setIsLoading(false)
-                setDataOfService( services => services.filter( item => item.id !== dataItem.id) )
             }
-            else
+            catch(err){
                 setIsLoading(false)
-        }
-        catch(err){
-            setIsLoading(false)
-            console.log("co loi fetch amenities")
+                console.log("co loi fetch amenities")
+            }
         }
     }
     

@@ -1,25 +1,14 @@
 import './styleOfTable.css'
 import { apiUserService,useBranch } from '../index'
 import {  FaLock,FaEdit,FaUnlock,FaPersonBooth} from "react-icons/fa"
+import {MemberLevel} from "../Dash"
 
-const MemberLevel = ({amount}) => {
-    if(amount > 20000000)
-        return  "Dadđy"
-    else if(amount > 10000000)
-        return "VIP"
-    else if(amount > 1000000)
-        return "Bạn mới"
-    else if(amount > 0)
-        return "Thành viên"
-    return "Thành viên mới"
-}
-
-const ButtonActionUserEnable = ({handleHideUser,userItem,setDataItem}) => {
+const ButtonActionUserEnable = ({handleHideUser,userItem,setDataItem,handleFetchDetailOfUser}) => {
     return <>
         <button className="btn-1 btn-edit" onClick={()=>setDataItem(userItem)}>
             <FaEdit/> Sửa
         </button>
-        <button className="btn-1 btn-add">
+        <button className="btn-1 btn-add" onClick={()=>handleFetchDetailOfUser(userItem)}>
             <FaPersonBooth/> Chi tiết
         </button>
         <button className="btn-1 btn-lock" onClick={handleHideUser}>
@@ -35,10 +24,11 @@ const ButtonActionUserDisable = ({handleOpenUser}) => {
     </>    
 }
 
-const RowTableUser = ({userItem,index,setDataItem,setDataOfUser,setDataOfUserActive}) => {
+const RowTableUser = ({userItem,index,setDataItem,setDataOfUser,setDataOfUserActive,setDetailOfUser}) => {
     const {setIsLoading} = useBranch()
 
     const handleHideUser = async () => {
+        setDetailOfUser({})
         try{
             setIsLoading(true)
             const res = await fetch(apiUserService.baseURL+`/users/disable/${userItem.userId}`,{
@@ -47,22 +37,48 @@ const RowTableUser = ({userItem,index,setDataItem,setDataOfUser,setDataOfUserAct
                     'Content-Type': 'application/json'
                 }
             })
+            
+            setIsLoading(false)
             if(res.ok){
-                setIsLoading(false)
                 const data = await res.json()
                 if(data.code === 1001){
                     setDataOfUser( users => users.filter( item => item.userId !== userItem.userId))
                     setDataOfUserActive( users => users.filter( item => item.userId !== userItem.userId))
                 }
             }
-            else
-                setIsLoading(false)
         }
         catch(err){
             setIsLoading(false)
             console.log("loi roi ni oi")
         }
-        
+    }
+
+    const handleFetchDetailOfUser = async (user) => {
+        try{
+            setIsLoading(true)
+            const res = await fetch(apiUserService.baseURL+`/bookings/customer?customerId=${user.userId}`)
+            
+            setIsLoading(false)
+            if(res.ok){
+                const data = await res.json()
+                if(data.code === 1001)
+                    setDetailOfUser(data.data)
+                else{
+                    let temp = {
+                        userId: user.userId,
+                        name: user.fullName,
+                        alreadySpent:0,
+                        phone:user.phone,
+                        roomRent:[]
+                    }
+                    setDetailOfUser(temp)
+                }
+            }
+        }
+        catch(err){
+            setIsLoading(false)
+            console.log("loi roi ni oi")
+        }
     }
 
     const handleOpenUser = async () => {
@@ -93,6 +109,13 @@ const RowTableUser = ({userItem,index,setDataItem,setDataOfUser,setDataOfUserAct
             console.log("loi open !")
         }
     }
+
+    const props = {
+        userItem,
+        setDataItem ,
+        handleFetchDetailOfUser,
+        handleHideUser,
+    }
     
     return <tr>
             <td>{index + 1}</td>
@@ -104,9 +127,9 @@ const RowTableUser = ({userItem,index,setDataItem,setDataOfUser,setDataOfUserAct
                 {
                 userItem.isActive 
                     ? 
-                    <ButtonActionUserEnable handleHideUser={handleHideUser} userItem={userItem} setDataItem={setDataItem}/> 
+                    <ButtonActionUserEnable {...props}/> 
                     : 
-                    <ButtonActionUserDisable handleOpenUser={handleOpenUser}/>
+                    <ButtonActionUserDisable handleOpenUser={handleOpenUser} />
                 }
             </td>
         </tr>
