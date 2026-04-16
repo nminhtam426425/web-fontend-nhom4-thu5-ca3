@@ -1,12 +1,49 @@
 import "./style.css"
 import RowDetailBooking from "./RowDetailBooking";
 import SelectBranch from "./SelectBranch";
-const bookings = [
-    { name: "Trần Anh Tuấn", room: "Deluxe 101", date: "22/03/2026", status: "Confirmed" },
-    { name: "Lê Thị Lan", room: "Suite 305", date: "22/03/2026", status: "Pending" },
-    { name: "Michael Smith", room: "Standard 202", date: "23/03/2026", status: "Confirmed" }
-];
+import { useEffect, useState } from "react";
+import { apiUserService, useBranch } from "../index.js";
 const DetailBranchBooking = ({data}) => {
+    const [bookings, setBookings] = useState([]);
+    const { setIsLoading } = useBranch();
+
+    useEffect(() => {
+        const fetchBookings = async () => {
+        try {
+            setIsLoading(true);
+
+            const res = await fetch(apiUserService.baseURL + "/bookings");
+
+            if (res.ok) {
+                const result = await res.json();
+
+                if (result.code === 1001) {
+                    const formatted = result.data.map(item => ({
+                        name: item.customer?.fullName || "N/A",
+                        room: item.roomType?.typeName || "N/A",
+                        date: formatDate(item.checkInDate),
+                        status: item.status
+                    }));
+
+                    setBookings(formatted);
+                }
+            }
+
+            setIsLoading(false);
+        } catch (err) {
+            setIsLoading(false);
+            console.log("Lỗi lấy bookings");
+        }
+    };
+        fetchBookings();
+    }, [setIsLoading]);
+
+    
+    const formatDate = (dateStr) => {
+        if (!dateStr) return "N/A";
+        const date = new Date(dateStr);
+        return date.toLocaleDateString("vi-VN");
+    };
     return <>
         <section className="details-grid">
             <div className="recent-bookings">
