@@ -9,7 +9,7 @@ import { useEffect, useState } from "react"
 
 
 const MainBooking = () => {
-    const {setIsLoading} = useBranch()
+    const {setIsLoading,isLoading} = useBranch()
     const [statusBooking, setStatusBooking] = useState("chờ xác nhận")
     const [dataForBooking, setDataForBooking] = useState([])
     const [dataItem,setDataItem] = useState(null)
@@ -56,6 +56,7 @@ const MainBooking = () => {
             <TableBooking dataForBooking={dataForBooking} status={statusBooking} data={dataItem} setDataItem={setDataItem}/>
         </div>
         <Modal styleModal="infoBooking" data={dataItem} setDataItem={setDataItem}/>
+        <Modal styleModal="loading" data={isLoading} setDataItem={setIsLoading} message="Vui lòng chờ"/>
     </div>
 }
 

@@ -1,14 +1,15 @@
 import "./styleOfMain.css"
 import {Chart,Stat,DetailBranchBooking} from "../Dash"
 import SidebarTemp from "./SidebarTemp"
-import Header from './Header.js';
+import Header from './Header.js'
+import Modal from "../Form/Modal"
 import {apiUserService,useBranch} from "../index"
-import { useEffect, useState } from "react";
+import { useEffect, useState } from "react"
 
 
 const MainHome = () => {
     const [dataOfDash,setDataOfDash] = useState({})
-    const {selectedBranchId,setIsLoading} = useBranch()
+    const {selectedBranchId,setIsLoading,isLoading} = useBranch()
 
     useEffect(()=>{
         const handleFetchDashData = async () => {
@@ -18,9 +19,8 @@ const MainHome = () => {
                 const res = await fetch(apiUserService.baseURL+url)
                 if(res.ok){
                     const data = await res.json()
-                    if(data.code === 200){
+                    if(data.code === 200)
                         setDataOfDash(data.data)
-                    }
                 }
                 setIsLoading(false)
             }
@@ -40,6 +40,7 @@ const MainHome = () => {
             <DetailBranchBooking data={dataOfDash}/>
             <Chart dataRevenue={dataOfDash}/>
         </div>
+        <Modal styleModal="loading" data={isLoading} setDataItem={setIsLoading} message="Vui lòng chờ"/>
     </div>
    
 }

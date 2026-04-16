@@ -4,24 +4,27 @@ import {apiUserService,useBranch} from "../index"
 
 const SelectBranch = () => {
     const [branches,setBranches] = useState([])
-    const {selectedBranchId,setSelectedBranchId} = useBranch()
+    const {selectedBranchId,setSelectedBranchId,setIsLoading} = useBranch()
 
     useEffect(()=>{
         const getBranches = async () => {
             try{
-            const res = await fetch(apiUserService.baseURL+"/branches")
+                setIsLoading(true)
+                const res = await fetch(apiUserService.baseURL+"/branches")
                 if(res.ok){
                     const data = await res.json()
                     setBranches(data)
                     setSelectedBranchId(data[0].branchId)
                 }
+                setIsLoading(false)
             } 
             catch(err){
+                setIsLoading(false)
                 console.log(err)
             }
         } 
          getBranches()
-    },[setSelectedBranchId])
+    },[setSelectedBranchId,setIsLoading])
    
     const handleOnChangeBranchId = async (e) => {
         setSelectedBranchId(e.target.value)

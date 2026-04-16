@@ -40,7 +40,8 @@ const ContentRoomManager = () => {
                 if(res.ok){
                     const data = await res.json()
                     setRoomTypes(data.data)
-
+                    setDataDetail({})
+                    setIsClick(-1)
                     setCurrentScroll(0)
 
                     revenueBranch.current = 0;
