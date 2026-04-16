@@ -1,5 +1,6 @@
 import "./style.css"
 import {FaConciergeBell,FaDoorOpen,FaDollarSign,FaPercentage} from "react-icons/fa"
+import {PrintAmountVND} from "./index"
 const Stat = ({data}) => {
     return <>
         <section className="stats-grid">
@@ -20,14 +21,17 @@ const Stat = ({data}) => {
             <div className="card">
                 <div className="icon-react"><FaDollarSign/></div>
                 <div>
-                    <h3>{data.totalRevenue}M</h3>
+                    <h3><PrintAmountVND amount={data?.totalRevenue || 0}/></h3>
                     <p>Doanh thu ngày</p>
                 </div>
             </div>
             <div className="card">
                 <div className="icon-react"><FaPercentage/></div>
                 <div>
-                    <h3>{data.totalRoomForUser*100/data.totalRoom}</h3>
+                    <h3>{
+                            Math.floor(data.totalRoomForUser*100/(data.totalRoom === 0 ? 1 : data.totalRoom))
+                        }%
+                    </h3>
                     <p>Tỉ lệ lấp đầy</p>
                 </div>
             </div>

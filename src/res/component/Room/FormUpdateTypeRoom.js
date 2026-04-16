@@ -128,7 +128,9 @@ const FormUpdateTypeRoom = ({dataDetail,price,setRoomImage,roomImage,setDataDeta
                 <button className="btn btn-add" onClick={handleButtonAddImageClick}>
                     + Thêm hình ảnh
                 </button>
-                <button className="btn btn-add" onClick={handleButtonAddImage} style={{marginLeft:'20px', cursor: !imgToUpload ? 'not-allowed' : 'pointer'}} disabled={!imgToUpload}>
+                <button className="btn btn-add" onClick={handleButtonAddImage} 
+                                                style={{marginLeft:'20px', cursor: imgToUpload.length===0 ? 'not-allowed' : 'pointer'}} 
+                                                disabled={imgToUpload.length===0}>
                     Lưu
                 </button>
             </div>

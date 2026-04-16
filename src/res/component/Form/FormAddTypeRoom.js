@@ -2,6 +2,7 @@ import { useEffect, useState,useRef } from "react"
 import "./styleOfForm.css"
 import { useBranch,apiUserService,apiCloudinary } from "../index"
 import RowTableImage from "../table/RowTableImage"
+import {passValidation,validateNoSpecialChars, validateNumber} from "../Valid"
 
 const FormAddStyleRoom = ({setDataItem,setDatas}) => {
     const [amenities,setAmenities] = useState([])
@@ -16,6 +17,15 @@ const FormAddStyleRoom = ({setDataItem,setDatas}) => {
         priceHour:"",
         capacity:""
     })
+    const [errorPrice,setErrorPrice] =useState({
+        typeName: validateNoSpecialChars(price.typeName),
+        basePrice: validateNumber(price.basePrice),
+        sundayPrice: validateNumber(price.sundayPrice),
+        peakPrice: validateNumber(price.peakPrice),
+        peakSundayPrice: validateNumber(price.peakSundayPrice),
+        priceHour: validateNumber(price.priceHour),
+        capacity: validateNumber(price.capacity)
+    })
     const inputImage = useRef(null)
     const {setIsLoading} = useBranch()
 
@@ -25,6 +35,18 @@ const FormAddStyleRoom = ({setDataItem,setDatas}) => {
             ...price,
             [id]: value 
         })
+        if(id === 'typeName'){
+            setErrorPrice({
+                ...errorPrice,
+                [id]: validateNoSpecialChars(value)
+            })
+        }
+        else{
+            setErrorPrice({
+                ...errorPrice,
+                [id]: validateNumber( value !== "" ? Number(value) : 0)
+            })
+        }
     }
 
     useEffect(() => {
@@ -33,12 +55,10 @@ const FormAddStyleRoom = ({setDataItem,setDatas}) => {
                 setIsLoading(true)
                 const res = await fetch(apiUserService.baseURL+'/amenities')
                 if(res.ok){
-                    setIsLoading(false)
                     const data  = await res.json()
-                    setAmenities(data)
+                    setAmenities(data.data)
                 }
-                else
-                    setIsLoading(false)
+                setIsLoading(false)
             }
             catch(err){
                 setIsLoading(false)
@@ -174,8 +194,16 @@ const FormAddStyleRoom = ({setDataItem,setDatas}) => {
             <h3 style={{margin:'10px 0'}}>Thêm loại phòng mới</h3>
             <div>
                 <div style={{display:'flex',gap:'20px'}}>
-                    <input type="text" id="typeName" value={price.typeName} onChange={handleInputChange} placeholder="Tên loại phòng" required/>
-                    <input type="text" id="capacity" value={price.capacity} onChange={handleInputChange} placeholder="Sức chứa" required/>
+                    <div className="input-price" style={{flex:1}}>
+                        <input type="text" id="typeName" className="input-field" value={price.typeName} onChange={handleInputChange} placeholder=""/>    
+                        <label htmlFor="typeName" className="input-label">Tên loại phòng</label>
+                        <span className="validation">{errorPrice.typeName}</span>
+                    </div>
+                    <div className="input-price" style={{flex:1}}>
+                        <input type="text" id="capacity" className="input-field" value={price.capacity} onChange={handleInputChange} placeholder=""/>
+                        <label htmlFor="capacity" className="input-label">Sức chứa</label>
+                        <span className="validation">{errorPrice.capacity}</span>
+                    </div>
                 </div>
                 <br/>
                 <h3>Chọn ảnh:</h3>
@@ -218,25 +246,34 @@ const FormAddStyleRoom = ({setDataItem,setDatas}) => {
                     <div className="input-price">
                         <input type="text" id="basePrice" className="input-field" placeholder="" value={price?.basePrice} onChange={handleInputChange}/>
                         <label htmlFor="basePrice" className="input-label">Giá ngày thường</label>
+                        <span className="validation">{errorPrice.basePrice}</span>
                     </div>
                     <div className="input-price">
                         <input type="text" id="sundayPrice" className="input-field" placeholder="" value={price?.sundayPrice} onChange={handleInputChange}/>
                         <label htmlFor="sundayPrice" className="input-label">Giá chủ nhật</label>
+                        <span className="validation">{errorPrice.sundayPrice}</span>
                     </div>
                     <div className="input-price">
                         <input type="text" id="peakPrice" className="input-field" placeholder="" value={price?.peakPrice} onChange={handleInputChange}/>
                         <label htmlFor="peakPrice" className="input-label">Giá mùa cao điểm</label>
+                        <span className="validation">{errorPrice.peakPrice}</span>
                     </div>
                     <div className="input-price">
                         <input type="text" id="peakSundayPrice" className="input-field" placeholder="" value={price?.peakSundayPrice} onChange={handleInputChange}/>
                         <label htmlFor="peakSundayPrice" className="input-label">Giá CN cao điểm</label>
+                        <span className="validation">{errorPrice.peakSundayPrice}</span>
                     </div> 
                     <div className="input-price">
                         <input type="text" id="priceHour" className="input-field" placeholder="" value={price?.priceHour} onChange={handleInputChange}/>
                         <label htmlFor="priceHour" className="input-label">Giá thuê giờ</label>
+                        <span className="validation">{errorPrice.priceHour}</span>
                     </div>
                 </div>
-                <button type="submit" className="btn btn-primary" style={{padding:'10px 50px',display:'block',margin:'0 auto',}} onClick={handleAddTypeRoom}>Lưu</button>
+                <button type="submit" className="btn btn-primary" 
+                        style={{padding:'10px 50px',display:'block',margin:'0 auto',cursor: passValidation(errorPrice) ? 'pointer' : 'not-allowed'}} 
+                        onClick={handleAddTypeRoom} 
+                        disabled={passValidation(errorPrice) ? false : true}>
+                Lưu</button>
             </div>
         </div>
     </>

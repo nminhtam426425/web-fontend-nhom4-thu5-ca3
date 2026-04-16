@@ -38,7 +38,6 @@ const ContentRoomManager = () => {
                 setIsLoading(true)
                 const res = await fetch(apiUserService.baseURL+url)
                 if(res.ok){
-                    setIsLoading(false)
                     const data = await res.json()
                     setRoomTypes(data.data)
 
@@ -53,8 +52,7 @@ const ContentRoomManager = () => {
                     }
                         
                 }
-                else
-                    setIsLoading(false)
+                setIsLoading(false)
             }
            catch(err){
                 console.log("loi khi lay du lieu roomtypes",err)

@@ -1,10 +1,14 @@
 import { useEffect, useState } from "react"
 import {apiUserService,useBranch} from '../index'
+import {passValidation,validateStrEmpty, validateNoSpecialChars} from "../Valid"
 import "./styleOfForm.css"
 
 const FormAddRoom = ({data,setDataItem,setDatas}) => {
     const [room,setRoom] = useState({
         name:""
+    })
+    const [errorRoom,setErrorRoom] = useState({
+        name: validateStrEmpty(room.name)
     })
     const {selectedBranchId,setIsLoading,typeRoomId} = useBranch()
 
@@ -14,6 +18,12 @@ const FormAddRoom = ({data,setDataItem,setDatas}) => {
             ...room,
             [id]:value
         })
+        setErrorRoom({
+            [id]: validateStrEmpty(value)
+        })
+        setErrorRoom({
+            [id]: validateNoSpecialChars(value)
+        })
     }
 
     useEffect( ()=>{
@@ -21,11 +31,15 @@ const FormAddRoom = ({data,setDataItem,setDatas}) => {
             setRoom({
                 name:data?.numberRoom || ""
             })
+            setErrorRoom({
+                name: validateStrEmpty(data?.numberRoom || "")
+            })
         }
         else{
             setRoom({
                 name:""
             })
+          
         }
     },[data])
 
@@ -46,15 +60,14 @@ const FormAddRoom = ({data,setDataItem,setDatas}) => {
                     branchId: selectedBranchId
                 })
             })
-            setIsLoading(false)
             if(res.ok){
                 const dataRes = await res.json()
                 if(method === 'POST'){
                     let temp = {
                         checkIn:"-",
                         checkOut:'-',
-                        id:dataRes.roomId,
-                        numberRoom:dataRes.roomNumber,
+                        id:dataRes.data.roomId,
+                        numberRoom:dataRes.data.roomNumber,
                         status:"trống"
     
                     }
@@ -71,6 +84,7 @@ const FormAddRoom = ({data,setDataItem,setDatas}) => {
                 }
                 setDataItem(null)
             }
+            setIsLoading(false)
         }
         catch(err){
             setIsLoading(false)
@@ -83,8 +97,17 @@ const FormAddRoom = ({data,setDataItem,setDatas}) => {
             <span className="close" onClick={()=>setDataItem(null)}>&times;</span>
             <h3 style={{margin:'10px 0'}}>Thêm phòng mới</h3>
             <div id="formRoom">
-                <input type="text" placeholder="Nhập mã phòng (VD: B101)" id="name" value={room.name} onChange={handleOnchangeName} required/>
-                <button type="submit" className="btn btn-success" onClick={handleAddRoom}>Lưu</button>
+                <div className="input-group" style={{width: '100%'}}>
+                    <input type="text" id="name" className="input-field" placeholder="" value={room.name} onChange={handleOnchangeName}/>
+                    <label htmlFor="name" className="input-label">Nhập mã phòng (VD: B101)</label>
+                    <span className="validation">{errorRoom.name}</span>
+                </div>
+                <button type="submit" className="btn btn-success" onClick={handleAddRoom}
+                                                                    style={{cursor: passValidation(errorRoom) ? 'pointer' : 'not-allowed',marginTop:'10px'}} 
+                                                                    disabled={passValidation(errorRoom) ? false : true}>
+                    Lưu
+                </button>
+               
             </div>
         </div>
     </>

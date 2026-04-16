@@ -34,12 +34,10 @@ const TableBranch = ({dataOfBranch,setDataItem,setDataOfBranch,dataOfBranchActiv
                 setIsLoading(true)
                 const res = await fetch(apiUserService.baseURL+'/branches/disabled')
                 if(res.ok){
-                    setIsLoading(false)
                     const data = await res.json()
                     setDataOfBranch(data)
                 }
-                else
-                    setIsLoading(false)
+                setIsLoading(false)
             }
             catch(err){
                 setIsLoading(false)

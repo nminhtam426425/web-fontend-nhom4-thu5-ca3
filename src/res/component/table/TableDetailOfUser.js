@@ -10,7 +10,7 @@ const RowDetail = ({data}) => {
             <td>
                 <PrintAmountVND amount={data?.alreadySpent}/>
             </td>
-            <td>{data?.rating} sao</td>
+            <td>{data?.rating ? data.rating+' sao' : "" }</td>
         </tr>
     </>
 }

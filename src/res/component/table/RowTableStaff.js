@@ -36,7 +36,6 @@ const RowTableStaff = ({staffItem,index,setDataItem,setDataOfStaff,setDataOfStaf
                 }
             })
             if(res.ok){
-                setIsLoading(false)
                 const data = await res.json()
                 if(data.code === 1001){
                     setIsLoading(false)
@@ -44,8 +43,7 @@ const RowTableStaff = ({staffItem,index,setDataItem,setDataOfStaff,setDataOfStaf
                     setDataOfStaffActive( staffs => staffs.filter( item => item.userId !== staffItem.userId))
                 } 
             }
-            else 
-                setIsLoading(false)
+            setIsLoading(false)
         }
         catch(err){
             setIsLoading(false)

@@ -13,14 +13,16 @@ const temp = {
     address: "HCM",
     add:true
 }
-const TableUser = ({dataOfUser,setDataItem,setDataOfUser,dataOfUserActive,setDataOfUserActive,setDetailOfUser,setIsClick}) => {
+const TableUser = ({dataOfUser,setDataItem,setDataOfUser,dataOfUserActive,setDataOfUserActive,setDetailOfUser,setIsClick,setUserForRender,itemPerPage,
+    setTotalPage,currentPage}) => {
+
     const props = {
             setDataItem,
             setDataOfUser,
             setDataOfUserActive,
             setDetailOfUser,
-            setIsClick
-    
+            setIsClick,
+            setUserForRender
     }
     const {setIsLoading} = useBranch()
     const [userDisable,setUserDisable] = useState(false)
@@ -28,26 +30,49 @@ const TableUser = ({dataOfUser,setDataItem,setDataOfUser,dataOfUserActive,setDat
     const handleChangeUserDiasable = async (e) => {
         let isChange = e.target.checked
         setUserDisable(isChange)
+        setDetailOfUser({})
         if(isChange){
             try{
                 setIsLoading(true)
                 const res = await fetch(apiUserService.baseURL+'/users/disabled')
                 if(res.ok){
-                    setIsLoading(false)
                     const data = await res.json()
-                    if(data.code===1001)
+                    if(data.code===1001){
                         setDataOfUser(data.data)
+                        setUserForRender(data.data)
+                        let totalPageTemp = data.data.length
+                        if(totalPageTemp !== 0){
+                            if(totalPageTemp%itemPerPage === 0)
+                                setTotalPage(totalPageTemp/itemPerPage)
+                            else
+                                setTotalPage(Math.floor(totalPageTemp/itemPerPage)+1)
+                        }
+                        else
+                            setTotalPage(0)
+                    }
                 }
-                else
-                    setIsLoading(false)
+                setIsLoading(false)
             }
             catch(err){
                 setIsLoading(false)
-                console.log("fail to get data user disable")
+                console.log("fail to get data user disable",err)
             }
         }
-        else
+        else{
             setDataOfUser(dataOfUserActive)
+            let totalPageTemp = dataOfUserActive.length
+            if(totalPageTemp !== 0){
+                if(totalPageTemp%itemPerPage === 0)
+                    setTotalPage(totalPageTemp/itemPerPage)
+                else
+                    setTotalPage(Math.floor(totalPageTemp/itemPerPage)+1)
+                    const startIndex = (currentPage-1) * itemPerPage
+                    const endIndex = startIndex + itemPerPage
+                    setUserForRender(dataOfUserActive.slice(startIndex,endIndex))
+            }
+            else
+                setTotalPage(0)
+        } 
     }
     const handleOpenModalStaff = () => {
         setDataItem(temp)

@@ -18,7 +18,6 @@ const RowTableImage = ({img,index,setRoomImage,dataDetail,setDataDetail,roomImag
                     const res = await fetch(apiUserService.baseURL+`/room-images/${img.imageId}`,{
                         method:'DELETE'
                     })
-                    setIsLoading(false)
                     if(res.ok){
                         const data = await res.text()
                         if(data === `Đã xóa ảnh có id ${img.imageId}`){
@@ -28,6 +27,7 @@ const RowTableImage = ({img,index,setRoomImage,dataDetail,setDataDetail,roomImag
                             setDataDetail(temp)
                         }
                     }
+                    setIsLoading(false)
                 }
                 catch(err){
                     setIsLoading(false)

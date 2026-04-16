@@ -34,13 +34,11 @@ const TableStaff = ({dataOfStaff,setDataItem,setDataOfStaff,dataOfStaffActive,se
                 setIsLoading(true)
                 const res = await fetch(apiUserService.baseURL+'/staff/disabled')
                 if(res.ok){
-                    setIsLoading(false)
                     const data = await res.json()
                     if(data.code===1001)
                         setDataOfStaff(data.data)
                 }
-                else
-                    setIsLoading(false)
+                setIsLoading(false)
             }
             catch(err){
                 setIsLoading(false)

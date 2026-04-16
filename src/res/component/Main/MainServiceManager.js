@@ -10,19 +10,18 @@ const MainServiceManager = () => {
     const [dataOfService,setDataOfService] = useState([])
     const [dataItem,setDataItem] = useState(null)
     const {isLoading,setIsLoading} = useBranch()
+    const [typeManagement,setTypeManagement] = useState("amenities")
 
     useEffect(()=>{
         const handleFetchService = async () => {
             try{
                 setIsLoading(true)
-                const res = await fetch(apiUserService.baseURL+"/amenities")
+                const res = await fetch(apiUserService.baseURL+`/${typeManagement}`)
                 if(res.ok){
-                    setIsLoading(false)
                     const data = await res.json()
-                    setDataOfService(data)
+                    setDataOfService(data.data)
                 }
-                else
-                    setIsLoading(false)
+                setIsLoading(false)
             }
             catch(err){
                 console.log("Lỗi lấy dữ liệu nhân viên")
@@ -30,18 +29,32 @@ const MainServiceManager = () => {
             }
         }
         handleFetchService()
-    },[setIsLoading])
+    },[setIsLoading,typeManagement])
+
+    const handleOnchangeTypeManagement = async (e) => {
+        setTypeManagement(e.target.value)
+    }
 
     return <div>
         <div className="container">
             <SidebarTemp/>
             <div className='main-content'>
                 <Header/>
-                <TableAmenAndSerive data={dataOfService} setDataOfService={setDataOfService} setDataItem={setDataItem}/>
+                <div className="filter-section" style={{marginTop:'10px'}}>
+                <label htmlFor="typeServiceFilter"><strong>Dữ liệu quản lý:</strong></label>
+                <select id="typeServiceFilter" onChange={handleOnchangeTypeManagement}>
+                    <option value="amenities">Tiện ích</option>
+                    <option value="services">Dịch vụ</option>
+                </select>
+            </div>
+                <TableAmenAndSerive data={dataOfService} 
+                                    setDataOfService={setDataOfService} 
+                                    setDataItem={setDataItem}
+                                    type={typeManagement}/>
             </div>
         </div>
-        <Modal styleModal='service' data={dataItem} setDataItem={setDataItem} setDatas={setDataOfService}/>
-        <Modal styleModal="loading" data={isLoading} setDataItem={setIsLoading} message="Đang tải dữ liệu, vui lòng chờ"/>
+        <Modal styleModal={typeManagement} data={dataItem} setDataItem={setDataItem} setDatas={setDataOfService}/>
+        <Modal styleModal="loading" data={isLoading} setDataItem={setIsLoading} message="Đang xử lý dữ liệu, vui lòng chờ"/>
     </div>
    
 }

@@ -17,15 +17,12 @@ const MainHome = () => {
                 const url = (selectedBranchId) ? `/dashboard/${selectedBranchId}` : '/dashboard/1'
                 const res = await fetch(apiUserService.baseURL+url)
                 if(res.ok){
-                    setIsLoading(false)
                     const data = await res.json()
                     if(data.code === 200){
-                        console.log(data.data)
                         setDataOfDash(data.data)
                     }
                 }
-                else
-                    setIsLoading(false)
+                setIsLoading(false)
             }
             catch(err){
                 setIsLoading(false)

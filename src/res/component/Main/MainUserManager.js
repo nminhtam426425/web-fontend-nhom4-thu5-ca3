@@ -6,37 +6,57 @@ import Modal from "../Form/Modal"
 import Header from './Header.js'
 import {apiUserService,useBranch} from "../index.js"
 import TableDetailOfUser from "../table/TableDetailOfUser.js"
+import Paging from "../Paging/Paging.js"
 
 const MainUserManager = () => {
+    const itemPerPage = 5
     const [dataOfUser,setDataOfUser] = useState([])
     const [dataOfUserActive,setDataOfUserActive] = useState([])
     const [isClick,setIsClick] = useState(false)
     const [detailOfUser,setDetailOfUser] = useState({})
     const [dataItem,setDataItem] = useState(null)
     const {isLoading,setIsLoading} = useBranch()
+    const [userForRender,setUserForRender] = useState([])
+    const [currentPage,setCurrentPage] = useState(1)
+    const [totalPage,setTotalPage] = useState(0)
     const props = {
-        dataOfUser,
+        // dataOfUser,
         dataOfUserActive,
         isClick,
+        itemPerPage,
+        currentPage,
         setDataOfUser,
         setDataItem,
         setDataOfUserActive,
         setDetailOfUser,
-        setIsClick
+        setIsClick,
+        setUserForRender,
+        setCurrentPage,
+        setTotalPage
     }
     useEffect(()=>{
         const handleFetchStaffs = async () => {
             try{
                 setIsLoading(true)
                 const res = await fetch(apiUserService.baseURL+"/users")
-                setIsLoading(false)
                 if(res.ok){
                     const data = await res.json()
                     if(data.code === 1001){
                         setDataOfUser(data.data)
                         setDataOfUserActive(data.data)
+
+                        const startIndex = (currentPage - 1) * itemPerPage
+                        const endIndex = startIndex + itemPerPage
+                        setUserForRender(data.data.slice(startIndex,endIndex))
+
+                        let totalPageTemp = data.data.length
+                        if(totalPageTemp%itemPerPage === 0)
+                            setTotalPage(totalPageTemp/itemPerPage)
+                        else
+                            setTotalPage(Math.floor(totalPageTemp/itemPerPage)+1)
                     }
                 }
+                setIsLoading(false)
             }
             catch(err){
                 setIsLoading(false)
@@ -44,13 +64,24 @@ const MainUserManager = () => {
             }
         }
         handleFetchStaffs()
-    },[setIsLoading])
+    },[setIsLoading,currentPage])
+
+    useEffect(() => {
+        const startIndex = (currentPage - 1) * itemPerPage
+        const endIndex = startIndex + itemPerPage
+        
+        if (dataOfUser.length > 0) {
+            setUserForRender(dataOfUser.slice(startIndex, endIndex))
+        }
+
+    }, [currentPage, dataOfUser])
     return <div>
         <div className='container'>
             <Sidebar/>
             <div className='main-content'>
                 <Header/>
-                <TableUser {...props}/>
+                <TableUser {...props} dataOfUser={userForRender}/>
+                <Paging currentPage={currentPage} setCurrentPage={setCurrentPage} totalPage={totalPage} setDetailOfUser={setDetailOfUser}/>
                 <TableDetailOfUser detailOfUser={detailOfUser} />
             </div>
         </div>

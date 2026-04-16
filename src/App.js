@@ -1,5 +1,5 @@
 import {BrowserRouter,Route,Routes} from 'react-router-dom'
-import {Home,ManagerBranches,ManagerStaff,ManagerTypeRoom,Login,Logout,ManagerUser,ManagerService} from './res/page'
+import {Home,ManagerBranches,ManagerStaff,ManagerTypeRoom,Login,Logout,ManagerUser,ManagerService, ManagerBooking} from './res/page'
 import ProtectedRoute from './res/ProtectRoute'
 import './index.css'
 
@@ -32,6 +32,10 @@ function App() {
     {
       path:'/service',
       element:ManagerService
+    },
+    {
+      path:'/bookings',
+      element: ManagerBooking
     }
   ]
   return <BrowserRouter>

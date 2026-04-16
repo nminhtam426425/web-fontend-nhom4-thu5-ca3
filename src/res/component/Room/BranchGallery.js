@@ -40,7 +40,7 @@ const BranchGallery = ({setSrcImage,images}) => {
                 {
                     images.map((img, index) => (
                         <div key={index} className="gallery-item">
-                            <img src={img.imageUrl} alt={"anh "+index} onClick={() => openImage(img.imageUrl)}  />
+                            <img src={img?.url || img.imageUrl} alt={"anh "+index} onClick={() => openImage(img?.url || img.imageUrl)}  />
                         </div>
                     ))
                 }

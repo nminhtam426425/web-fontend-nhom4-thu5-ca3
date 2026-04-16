@@ -19,17 +19,15 @@ const MainStaffManager = () => {
     useEffect(()=>{
         const fetchData = async () => {
             try{
+                console.log("abc")
                 setIsLoading(true)
                 const res = await fetch(apiUserService.baseURL + "/branches")
                 if (res.ok) {
                     const data = await res.json() 
-                    setIsLoading(false)
                     setDataOfBranch(data)
                     setDataOfBranchActive(data)
                 }
-                else{
-                    setIsLoading(false)
-                }
+                setIsLoading(false)
             }
             catch (error) {
                 console.error("Fetch error:", error)
@@ -39,6 +37,7 @@ const MainStaffManager = () => {
         fetchData()
     },[setIsLoading])
 
+
     return <div>
         <div className='container'>
             <Sidebar/>
@@ -47,7 +46,7 @@ const MainStaffManager = () => {
                 <TableBranch {...props} setDataOfBranch={setDataOfBranch} setDataItem={setDataItem}/>
             </div>
         </div>
-        <Modal styleModal="branch" data={dataItem} setDataItem={setDataItem} setDatas={setDataOfBranch}/>
+        <Modal styleModal="branch" data={dataItem} setDataItem={setDataItem} setDatas={setDataOfBranch} setDatasActive={setDataOfBranchActive}/>
         <Modal styleModal="loading" data={isLoading} setDataItem={setIsLoading} message="Đang tải dữ liệu chi nhánh"/>
     </div>
    

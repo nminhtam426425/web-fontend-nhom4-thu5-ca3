@@ -20,6 +20,7 @@ th, td {
 th {
     background-color: #f8f9fa;
 }
+tr:hover { background-color: #f8f9ff; }
 /* Buttons */
 .btn-1 {
     padding: 8px 15px;

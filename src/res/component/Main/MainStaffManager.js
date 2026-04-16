@@ -28,13 +28,11 @@ const MainStaffManager = () => {
                 if(res.ok){
                     const data = await res.json()
                     if(data.code === 1001){
-                        setIsLoading(false)
                         setDataOfStaff(data.data)
                         setDataOfStaffActive(data.data)
                     }  
                 }
-                else
-                    setIsLoading(false)
+                setIsLoading(false)
             }
             catch(err){
                 setIsLoading(false)

@@ -5,6 +5,7 @@ import FormLogin from "./Form/FormLogin"
 import MainRoomManager from "./Main/MainRoomManager"
 import MainUserManager from "./Main/MainUserManager"
 import MainServiceManager from "./Main/MainServiceManager"
+import MainBooking from "./Main/MainBooking"
 import { createContext, useState, useContext } from 'react';
 
 const apiUserService = {
@@ -46,4 +47,9 @@ const BranchProvider = ({ children }) => {
 };
 const useBranch = () => useContext(BranchContext)
 
-export {apiUserService,apiCloudinary,MainStaffManager,MainBranchManager,MainHome,FormLogin,MainRoomManager,useBranch,BranchProvider,MainUserManager,MainServiceManager}
+export {
+    apiUserService,apiCloudinary,MainStaffManager,
+    MainBranchManager,MainHome,FormLogin,
+    MainRoomManager,useBranch,BranchProvider,
+    MainUserManager,MainServiceManager,MainBooking
+}

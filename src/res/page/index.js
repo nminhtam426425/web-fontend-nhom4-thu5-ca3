@@ -6,4 +6,5 @@ import Logout from './Logout'
 import ManagerTypeRoom from "./ManagerTypeRoom"
 import ManagerUser from "./ManagerUser"
 import ManagerService from "./ManagerService"
-export {Home,ManagerBranches,ManagerStaff,ManagerTypeRoom,Login,Logout,ManagerUser,ManagerService}
+import ManagerBooking from './ManagerBooking'
+export {Home,ManagerBranches,ManagerStaff,ManagerTypeRoom,Login,Logout,ManagerUser,ManagerService,ManagerBooking}

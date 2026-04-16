@@ -153,3 +153,28 @@ hr{
     margin-right: 10px;
     font-size: 18px;
 }
+
+.mainBooking {
+    min-width: 600px;
+    margin: 0 auto;
+}
+
+.filter-section {
+    background: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap:50px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+select {
+    padding: 10px 15px;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+    font-size: 16px;
+    outline: none;
+    cursor: pointer;
+}

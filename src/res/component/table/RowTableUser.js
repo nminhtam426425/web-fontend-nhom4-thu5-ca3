@@ -24,7 +24,7 @@ const ButtonActionUserDisable = ({handleOpenUser}) => {
     </>    
 }
 
-const RowTableUser = ({userItem,index,setDataItem,setDataOfUser,setDataOfUserActive,setDetailOfUser}) => {
+const RowTableUser = ({userItem,index,setDataItem,setDataOfUser,setDataOfUserActive,setDetailOfUser,setUserForRender}) => {
     const {setIsLoading} = useBranch()
 
     const handleHideUser = async () => {
@@ -37,8 +37,6 @@ const RowTableUser = ({userItem,index,setDataItem,setDataOfUser,setDataOfUserAct
                     'Content-Type': 'application/json'
                 }
             })
-            
-            setIsLoading(false)
             if(res.ok){
                 const data = await res.json()
                 if(data.code === 1001){
@@ -46,6 +44,7 @@ const RowTableUser = ({userItem,index,setDataItem,setDataOfUser,setDataOfUserAct
                     setDataOfUserActive( users => users.filter( item => item.userId !== userItem.userId))
                 }
             }
+            setIsLoading(false)
         }
         catch(err){
             setIsLoading(false)
@@ -94,15 +93,13 @@ const RowTableUser = ({userItem,index,setDataItem,setDataOfUser,setDataOfUserAct
                 setIsLoading(false)
                 const data = await res.json()
                 if(data.code === 1001){
-                   
-                    setIsLoading(false)
                     setDataOfUser( users => users.filter( item => item.userId !== userItem.userId))
+                    setUserForRender( users => users.filter( item => item.userId !== userItem.userId))
                     userItem.isActive = true
                     setDataOfUserActive( users => [...users,userItem])
                 } 
             }
-            else 
-                setIsLoading(false)
+            setIsLoading(false)
         }
         catch(err){
             setIsLoading(false)

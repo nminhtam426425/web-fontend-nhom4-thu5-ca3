@@ -35,8 +35,7 @@ const RowTableStaff = ({branchItem,index,setDataItem,setDataOfBranch,setDataOfBr
         if(data.code === 200){
             setDataOfBranch( branches => branches.filter( item => item.branchId !== branchItem.branchId))
             setDataOfBranchActive( branches => branches.filter( item => item.branchId !== branchItem.branchId))
-        }
-            
+        } 
     }
 
     const handleOpenBranch = async () => {

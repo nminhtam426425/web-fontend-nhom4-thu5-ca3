@@ -216,3 +216,75 @@ th {
     gap: 5px;
     margin-top: 20px;
 }
+
+/* chi tiet thong tin dat phong */
+.invoice-box {
+    position: relative;
+    min-width: 800px;
+    margin: auto;
+    padding: 30px;
+    border: 1px solid #eee;
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 20px;
+}
+
+.header-info {
+    text-align: center;
+    border-bottom: 2px solid var(--primary-color);
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+}
+
+.header-info h1 {
+    margin: 0;
+    color: var(--primary-color);
+    text-transform: uppercase;
+    font-size: 24px;
+}
+
+.info-section {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    margin-bottom: 20px;
+}
+
+.info-group h3 {
+    border-bottom: 1px solid #dee2e6;
+    padding-bottom: 5px;
+    color: var(--secondary-color);
+    font-size: 18px;
+}
+
+.info-item {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 8px;
+}
+
+.label {
+    font-weight: bold;
+    color: #555;
+}
+
+.total-section {
+    margin-top: 30px;
+    padding-top: 15px;
+    border-top: 2px dashed #dee2e6;
+    text-align: right;
+}
+
+.total-amount {
+    font-size: 22px;
+    font-weight: bold;
+    color: #e74c3c;
+}
+
+.validation{
+    font-size: 12px;
+    position: absolute;
+    top: 80%;
+    left:0;
+    color: #e74c3c;
+}

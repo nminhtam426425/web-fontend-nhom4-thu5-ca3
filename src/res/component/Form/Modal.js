@@ -6,10 +6,12 @@ import FormAddStyleRoom from './FormAddTypeRoom'
 import FormAddRoom from "./FormAddRoom"
 import FormShowImage from './FormShowImage'
 import FormUser from './FormUser'
-import FormService from "./FormService"
+import FromAmenities from "./FormAmenities"
 import Loading from './Loading'
+import FormInfoBooking from './FormInfoBooking'
+import FormService from './FormService'
 
-const Modal = ({styleModal,data,setDataItem,setDatas,roleForCreate,message}) => {
+const Modal = ({styleModal,data,setDataItem,setDatas,roleForCreate,setDatasActive,message}) => {
     const style = {
         staff:FormStaff,
         branch: FormBranch,
@@ -18,15 +20,18 @@ const Modal = ({styleModal,data,setDataItem,setDatas,roleForCreate,message}) => 
         addRoom:FormAddRoom,
         showImage:FormShowImage,
         user:FormUser,
-        service:FormService,
-        loading:Loading
+        amenities:FromAmenities,
+        loading:Loading,
+        infoBooking: FormInfoBooking,
+        services: FormService
     }
     let Element = style[styleModal]
     let props = {
         data,
         setDataItem,
         setDatas,
-        message
+        message,
+        setDatasActive
     }
     if(roleForCreate)
         props.roleForCreate = roleForCreate

@@ -4,10 +4,11 @@ import { FaPlus } from "react-icons/fa"
 const temp = {
     description: 'Mua 1 tang 1'
 }
-const TableAmenAndSerive = ({data,setDataItem,setDataOfService}) => {
+const TableAmenAndSerive = ({data,setDataItem,setDataOfService,type}) => {
     const props = {
         setDataItem,
         setDataOfService,    
+        type
     }
     return <>
         <div>
@@ -24,7 +25,10 @@ const TableAmenAndSerive = ({data,setDataItem,setDataOfService}) => {
                         <tr>
                             <th>STT</th>
                                 {
-                                    (data?.description || true) ? <th>Tên tiện nghi</th> :<th>Tên dịch vụ</th> 
+                                    (data?.serviceName || true) ? <th>Tên dịch vụ</th> : <th>Tên tiện nghi</th>
+                                }
+                                {
+                                    (type==='services')&&<th>Mô tả dịch vụ</th>
                                 }
                             <th>Thao tác</th>
                         </tr>

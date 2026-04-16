@@ -7,7 +7,6 @@ import {
     FaChevronDown, 
     FaBed, 
     FaCalendarCheck, 
-    FaChartLine, 
     FaChevronUp
 } from "react-icons/fa"
 
@@ -62,15 +61,15 @@ const Sidebar = () => {
                             </div>
                         </li>
                         <li>
-                            <Link to="#">
-                                <FaCalendarCheck /> Đặt phòng
+                            <Link to="/bookings">
+                                <FaCalendarCheck /> Danh sách đặt phòng
                             </Link>
                         </li>
-                        <li>
+                        {/* <li>
                             <Link to="#">
                                 <FaChartLine /> Báo cáo
                             </Link>
-                        </li>
+                        </li> */}
                     </ul>
                 </nav>
             </aside>
