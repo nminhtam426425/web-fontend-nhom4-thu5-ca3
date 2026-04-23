@@ -6,7 +6,6 @@ import Modal from "../Form/Modal"
 import {apiUserService,useBranch,customeFetch} from "../index"
 import { useEffect, useState } from "react"
 
-
 const MainHome = () => {
     const [dataOfDash,setDataOfDash] = useState({})
     const {selectedBranchId,setIsLoading,isLoading} = useBranch()

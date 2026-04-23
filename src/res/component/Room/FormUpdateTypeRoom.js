@@ -125,7 +125,7 @@ const FormUpdateTypeRoom = ({dataDetail,setRoomImage,roomImage,setDataDetail}) =
             setRoomImage(images => [...images,...imgs])
             let temp = dataDetail
             temp.images = [...roomImage,...imgs]
-        (temp)
+            setDataDetail(temp)
         }
     }
 
