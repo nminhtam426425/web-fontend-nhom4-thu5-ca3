@@ -8,29 +8,11 @@ import "./styleOfRoom.css"
 const DetailTypeRoom = ({isClick,setRoom,setSrcImage,dataDetail,state,roomsOfType,setRoomsOfType,setDataDetail}) => {
     const {setTypeRoomId} = useBranch()
     const [roomImage,setRoomImage] = useState([])
-    const [price,setPrice] = useState({
-        basePrice:0,
-        sundayPrice:0,
-        peakPrice:0,
-        peakSundayPrice:0,
-        priceHour:0
-    })
 
     useEffect( ()=>{
         setRoomsOfType(dataDetail?.rooms || [])
     },[setRoomsOfType,dataDetail?.rooms])
 
-    useEffect(()=>{
-        if(dataDetail){
-            setPrice({
-                basePrice:dataDetail.basePrice || 0,
-                sundayPrice:dataDetail.priceSundayNormal || 0,
-                peakPrice:dataDetail.pricePeakSeason || 0,
-                peakSundayPrice:dataDetail.pricePeakSunday || 0,
-                priceHour:dataDetail.priceHour || 0
-            })
-        }
-    },[dataDetail,setPrice])
 
     useEffect( ()=>{
         setTypeRoomId(dataDetail?.typeId || 0)
@@ -40,7 +22,6 @@ const DetailTypeRoom = ({isClick,setRoom,setSrcImage,dataDetail,state,roomsOfTyp
     const props = {
         isClick,
         dataDetail, 
-        price, 
         roomImage,
         setRoomImage,
         setDataDetail
@@ -52,7 +33,7 @@ const DetailTypeRoom = ({isClick,setRoom,setSrcImage,dataDetail,state,roomsOfTyp
                 {
                     (state === 'detail')
                     ?
-                        <FormDetailTypeRoom dataDetail={dataDetail} price={price} setSrcImage={setSrcImage} roomImage={roomImage}/>
+                        <FormDetailTypeRoom dataDetail={dataDetail} setSrcImage={setSrcImage} roomImage={roomImage}/>
                     :
                         <FormUpdateTypeRoom {...props}/>
                 }

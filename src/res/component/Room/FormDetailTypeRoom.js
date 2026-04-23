@@ -1,7 +1,8 @@
 import "./styleOfRoom.css"
 import BranchGallery from "./BranchGallery"
 
-const FormDetailTypeRoom = ({dataDetail,price,setSrcImage,roomImage}) => {
+const FormDetailTypeRoom = ({dataDetail,setSrcImage,roomImage}) => {
+    console.log(dataDetail)
     return <>
         <div className="detail-header">
             <h3>Chi tiết loại phòng: <span id="selectedTypeName">{dataDetail?.typeName || ""}</span></h3>
@@ -9,23 +10,23 @@ const FormDetailTypeRoom = ({dataDetail,price,setSrcImage,roomImage}) => {
         </div>
         <div className="detail-price">
             <div className="input-price">
-                <input type="text" id="price-1" className="input-field" placeholder="" value={price?.basePrice.toLocaleString('vi-VN') + 'đ'} readOnly/>
+                <input type="text" id="price-1" className="input-field" placeholder="" value={dataDetail?.basePrice?.toLocaleString('vi-VN') + 'đ'} readOnly/>
                 <label htmlFor="price-1" className="input-label">Giá ngày thường</label>
             </div>
             <div className="input-price">
-                <input type="text" id="price-2" className="input-field" placeholder="" value={price?.sundayPrice.toLocaleString('vi-VN') + 'đ'} readOnly/>
+                <input type="text" id="price-2" className="input-field" placeholder="" value={dataDetail?.priceSundayNormal?.toLocaleString('vi-VN') + 'đ'} readOnly/>
                 <label htmlFor="price-2" className="input-label">Giá chủ nhật</label>
             </div>
             <div className="input-price">
-                <input type="text" id="price-3" className="input-field" placeholder="" value={price?.peakPrice.toLocaleString('vi-VN') + 'đ'} readOnly/>
+                <input type="text" id="price-3" className="input-field" placeholder="" value={dataDetail?.pricePeakSeason?.toLocaleString('vi-VN') + 'đ'} readOnly/>
                 <label htmlFor="price-3" className="input-label">Giá mùa cao điểm</label>
             </div>
             <div className="input-price">
-                <input type="text" id="price-4" className="input-field" placeholder="" value={price?.peakSundayPrice.toLocaleString('vi-VN') + 'đ'} readOnly/>
+                <input type="text" id="price-4" className="input-field" placeholder="" value={dataDetail?.pricePeakSunday?.toLocaleString('vi-VN') + 'đ'} readOnly/>
                 <label htmlFor="price-4" className="input-label">Giá CN cao điểm</label>
             </div> 
             <div className="input-price">
-                <input type="text" id="price-5" className="input-field" placeholder="" value={price?.priceHour.toLocaleString('vi-VN') + 'đ'} readOnly/>
+                <input type="text" id="price-5" className="input-field" placeholder="" value={dataDetail?.priceHour?.toLocaleString('vi-VN') + 'đ'} readOnly/>
                 <label htmlFor="price-5" className="input-label">Giá thuê giờ</label>
             </div>
         </div>

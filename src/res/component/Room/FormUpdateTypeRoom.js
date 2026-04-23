@@ -3,7 +3,7 @@ import "./styleOfRoom.css"
 import RowTableImage from "../table/RowTableImage"
 import {apiCloudinary,apiUserService,customeFetch,useBranch} from "../index"
 
-const FormUpdateTypeRoom = ({dataDetail,price,setRoomImage,roomImage,setDataDetail}) => {
+const FormUpdateTypeRoom = ({dataDetail,setRoomImage,roomImage,setDataDetail}) => {
     const inputImage = useRef(null)
     const [imgToUpload,setImgToUpload] = useState([])
     const {setIsLoading} = useBranch()
@@ -15,11 +15,11 @@ const FormUpdateTypeRoom = ({dataDetail,price,setRoomImage,roomImage,setDataDeta
     })
 
     const [priceUpdate,setPriceUpdate] = useState({
-        basePrice: price?.basePrice || 0,
-        sundayPrice: price?.sundayPrice || 0,
-        peakPrice: price?.peakPrice || 0,
-        peakSundayPrice: price?.peakSundayPrice || 0,
-        priceHour: price?.priceHour || 0
+        basePrice: dataDetail?.basePrice || 0,
+        sundayPrice: dataDetail?.priceSundayNormal || 0,
+        peakPrice: dataDetail?.pricePeakSeason || 0,
+        peakSundayPrice: dataDetail?.pricePeakSunday || 0,
+        priceHour: dataDetail?.priceHour || 0
     })
 
     const [focusField, setFocusField] = useState(null);
@@ -125,7 +125,7 @@ const FormUpdateTypeRoom = ({dataDetail,price,setRoomImage,roomImage,setDataDeta
             setRoomImage(images => [...images,...imgs])
             let temp = dataDetail
             temp.images = [...roomImage,...imgs]
-            setDataDetail(temp)
+        (temp)
         }
     }
 
@@ -201,9 +201,9 @@ const FormUpdateTypeRoom = ({dataDetail,price,setRoomImage,roomImage,setDataDeta
                 JSON.stringify({
                     typeName:typeName.typeName,
                     basePrice: priceUpdate?.basePrice ,
-                    sundayPrice: priceUpdate?.sundayPrice,
-                    peakPrice: priceUpdate?.peakPrice,
-                    peakSundayPrice: priceUpdate?.peakSundayPrice,
+                    priceSundayNormal: priceUpdate?.sundayPrice,
+                    pricePeakSeason: priceUpdate?.peakPrice,
+                    pricePeakSunday: priceUpdate?.peakSundayPrice,
                     priceHour: priceUpdate?.priceHour,
                     capacity: Number(typeName.capacity),
                     amenities: amenitiesForUpdate
@@ -216,11 +216,12 @@ const FormUpdateTypeRoom = ({dataDetail,price,setRoomImage,roomImage,setDataDeta
                 temp.basePrice = data.basePrice
                 temp.priceSundayNormal = data.priceSundayNormal
                 temp.pricePeakSeason = data.pricePeakSeason
-                temp.pricePeakSunday = data.pricePeakSunday
+                temp.pricePeakSunday =  data.pricePeakSunday
                 temp.priceHour = data.priceHour
-                temp.capacity = data.capacity
+                temp.capacity =  data.capacity
                 temp.typeName = data.typeName
-                setDataDetail(temp)
+        
+                setDataDetail(temp);
             }
             setIsLoading(false)
         }
