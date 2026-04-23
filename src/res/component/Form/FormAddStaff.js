@@ -1,6 +1,6 @@
 import './styleOfForm.css'
 import { useState,useEffect } from 'react'
-import {useBranch,apiUserService} from "../index"
+import {useBranch,apiUserService, customeFetch} from "../index"
 import {passValidation,validateEmail,validatePhoneNumber,validateStrEmpty,validateUsername} from "../Valid"
 
 const FormStaff = ({data,setDataItem,setDatas,roleForCreate}) => {
@@ -116,18 +116,11 @@ const FormStaff = ({data,setDataItem,setDatas,roleForCreate}) => {
                 }
             }
             setIsLoading(true)
-            const res = await fetch(apiUserService.baseURL+url,{
-                method:'POST',
-                headers:{
-                    'Content-Type': 'application/json'
-                },
-                body:JSON.stringify(objectForAction)
-            })
+            const res = await customeFetch(apiUserService.baseURL+url,'authen','POST',JSON.stringify(objectForAction))
             if(res.ok){
-                setIsLoading(false)
                 const data = await res.json()
                 staff.isActive = true
-                staff.userId = data.data.id
+                staff.userId = data.data.userId || data.data.id
                 if(data.code === 1001){
                     setDatas(staffs => [...staffs,staff])
                     setDataItem(null)
@@ -136,9 +129,8 @@ const FormStaff = ({data,setDataItem,setDatas,roleForCreate}) => {
                     alert(data.data)
                 }
             }
-            else{
-                setIsLoading(false)
-            }
+            setIsLoading(false)
+            
         }
         catch(err){
             setIsLoading(false)

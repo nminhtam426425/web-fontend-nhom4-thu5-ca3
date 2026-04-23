@@ -1,6 +1,6 @@
 import './styleOfForm.css'
 import { useState,useEffect } from 'react'
-import {apiUserService} from "../index"
+import {apiUserService, customeFetch} from "../index"
 import {validateEmail,validatePhoneNumber,passValidation,validateStrEmpty} from "../Valid"
 
 const FormBranch = ({data,setDataItem,setDatas,setDatasActive}) => {
@@ -84,12 +84,10 @@ const FormBranch = ({data,setDataItem,setDatas,setDatasActive}) => {
             conditionUrl = (data?.branchId) ?   `/branches/${data.branchId}` : `/branches?userId=${localStorage.getItem('admin_id')}`
             method = (data?.branchId) ? 'PUT' : 'POST'
 
-            const res =  await fetch(apiUserService.baseURL+conditionUrl,{
-                method: method,  
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body:JSON.stringify({
+            const res =  await customeFetch(apiUserService.baseURL+conditionUrl,
+                'authen',
+                method,
+                JSON.stringify({
                     branchName:branch.name_branch,
                     address:branch.address_branch,
                     phone:branch.phone_branch,
@@ -97,7 +95,7 @@ const FormBranch = ({data,setDataItem,setDatas,setDatasActive}) => {
                     description:branch.desc_branch,
                     isActive:true
                 })
-            })
+            )
 
             if(res.ok){
                 if(data?.branchId){

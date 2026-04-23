@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react'
 import Sidebar from './SidebarTemp.js'
 import Modal from "../Form/Modal"
 import Header from './Header.js'
-import {apiUserService,useBranch} from "../index.js"
+import {apiUserService,useBranch,customeFetch} from "../index.js"
 
 const MainStaffManager = () => {
     const [dataOfStaff,setDataOfStaff] = useState([])
@@ -24,7 +24,7 @@ const MainStaffManager = () => {
             try{
                 const url = (selectedBranchId) ? `/staff/branch/${selectedBranchId}` : '/staff'
                 setIsLoading(true)
-                const res = await fetch(apiUserService.baseURL+url)
+                const res = await customeFetch(apiUserService.baseURL+url,'authen','GET')
                 if(res.ok){
                     const data = await res.json()
                     if(data.code === 1001){

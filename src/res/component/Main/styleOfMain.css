@@ -84,6 +84,7 @@ hr{
 .menu-container {
     display: none;
     position: absolute;
+    z-index: 100;
     width: 320px;
     background: white;
     border-radius: 8px;

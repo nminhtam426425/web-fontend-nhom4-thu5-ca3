@@ -3,8 +3,7 @@ import Sidebar from "./SidebarTemp"
 import Header from "./Header"
 import TableBooking from "../table/TableBooking"
 import Modal from "../Form/Modal"
-import { SelectBranch } from "../Dash"
-import {useBranch,apiUserService} from "../index"
+import {useBranch,apiUserService,customeFetch} from "../index"
 import { useEffect, useState } from "react"
 
 
@@ -17,7 +16,7 @@ const MainBooking = () => {
         const getDataBooking = async () => {
             try{
                 setIsLoading(true)
-                const res = await fetch(apiUserService.baseURL+`/bookings/status?status=${statusBooking}`)
+                const res = await customeFetch(apiUserService.baseURL+`/bookings/status?status=${statusBooking}`,'authen','GET')
                 if(res.ok){
                     const data = await res.json()
                     setDataForBooking(data.data)
@@ -40,8 +39,6 @@ const MainBooking = () => {
         <Sidebar/>
         <div className="main-content">
             <Header/>
-            <SelectBranch/>
-
             <div className="filter-section" style={{marginTop:'10px'}} onChange={handleOnchangeStatusBooking}>
                 <label htmlFor="statusFilter"><strong>Trạng thái hiển thị:</strong></label>
                 <select id="statusFilter">

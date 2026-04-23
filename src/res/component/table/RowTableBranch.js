@@ -1,5 +1,5 @@
 import './styleOfTable.css'
-import { apiUserService,useBranch } from '../index'
+import { apiUserService,customeFetch,useBranch } from '../index'
 import { FaLock,FaEdit,FaUnlock} from "react-icons/fa"
 
 const ButtonActionBranchEnable = ({handleHideBranch,branchItem,setDataItem}) => {
@@ -27,10 +27,7 @@ const RowTableStaff = ({branchItem,index,setDataItem,setDataOfBranch,setDataOfBr
     const handleHideBranch = async () => {
         const formData = new FormData()
         formData.append('userId',localStorage.getItem('admin_id'))
-        const res = await fetch(apiUserService.baseURL+`/branches/hide/${branchItem.branchId}`,{
-            method:'PUT',
-            body:formData
-        })
+        const res = await customeFetch(apiUserService.baseURL+`/branches/hide/${branchItem.branchId}`,'authen','PUT',formData)
         const data = await res.json()
         if(data.code === 200){
             setDataOfBranch( branches => branches.filter( item => item.branchId !== branchItem.branchId))
@@ -41,12 +38,10 @@ const RowTableStaff = ({branchItem,index,setDataItem,setDataOfBranch,setDataOfBr
     const handleOpenBranch = async () => {
         try{
             setIsLoading(true)
-            const res =  await fetch(apiUserService.baseURL+`/branches/update-info/${branchItem.branchId}`,{
-                method: 'PUT',  
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body:JSON.stringify({
+            const res =  await customeFetch(apiUserService.baseURL+`/branches/update-info/${branchItem.branchId}`,
+                'authen',
+                'PUT',
+                JSON.stringify({
                     branchName:branchItem.branchName+"abc",
                     address:branchItem.address,
                     phone:branchItem.phone,
@@ -54,7 +49,7 @@ const RowTableStaff = ({branchItem,index,setDataItem,setDataOfBranch,setDataOfBr
                     description:branchItem.description,
                     isActive:true
                 })
-            })
+            )
             if(res.ok){
                 setIsLoading(false)
                 const data = await res.json()

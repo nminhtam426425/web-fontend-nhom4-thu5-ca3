@@ -1,5 +1,5 @@
 import "./styleOfMain.css"
-import {apiUserService,useBranch} from "../index"
+import {apiUserService,useBranch,customeFetch} from "../index"
 import TableBranch from '../table/TableBranch.js'
 import { useEffect, useState } from 'react'
 import Sidebar from './SidebarTemp.js'
@@ -19,9 +19,8 @@ const MainStaffManager = () => {
     useEffect(()=>{
         const fetchData = async () => {
             try{
-                console.log("abc")
                 setIsLoading(true)
-                const res = await fetch(apiUserService.baseURL + "/branches")
+                const res = await customeFetch(apiUserService.baseURL + "/branches",'authen','GET')
                 if (res.ok) {
                     const data = await res.json() 
                     setDataOfBranch(data)

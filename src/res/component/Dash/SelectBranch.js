@@ -1,6 +1,6 @@
 import "./style.css"
 import { useState,useEffect } from "react"
-import {apiUserService,useBranch} from "../index"
+import {apiUserService,useBranch,customeFetch} from "../index"
 
 const SelectBranch = () => {
     const [branches,setBranches] = useState([])
@@ -10,7 +10,7 @@ const SelectBranch = () => {
         const getBranches = async () => {
             try{
                 setIsLoading(true)
-                const res = await fetch(apiUserService.baseURL+"/branches")
+                const res = await customeFetch(apiUserService.baseURL+"/branches",'authen','GET')
                 if(res.ok){
                     const data = await res.json()
                     setBranches(data)

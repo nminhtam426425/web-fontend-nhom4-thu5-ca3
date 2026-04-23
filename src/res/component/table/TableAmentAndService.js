@@ -1,9 +1,6 @@
 import "./styleOfTable.css"
 import RowTableService from "./RowTableService"
 import { FaPlus } from "react-icons/fa"
-const temp = {
-    description: 'Mua 1 tang 1'
-}
 const TableAmenAndSerive = ({data,setDataItem,setDataOfService,type}) => {
     const props = {
         setDataItem,
@@ -14,7 +11,7 @@ const TableAmenAndSerive = ({data,setDataItem,setDataOfService,type}) => {
         <div>
             <header>
                 <h2 id="table-title">Danh sách {(data?.description || true) ? 'tiện nghi' :'dịch vụ' } có trong hệ thống</h2>
-                <button className="btn btn-add" onClick={()=>setDataItem(temp)}>
+                <button className="btn btn-add" onClick={()=>setDataItem({})}>
                     <FaPlus/> Thêm mới
                 </button>
             </header>

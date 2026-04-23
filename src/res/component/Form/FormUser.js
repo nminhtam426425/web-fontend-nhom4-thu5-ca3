@@ -1,6 +1,6 @@
 import './styleOfForm.css'
 import { useState,useEffect } from 'react'
-import {apiUserService,useBranch} from "../index"
+import {apiUserService,customeFetch,useBranch} from "../index"
 import { MemberShipLevel } from '../Dash'
 import {passValidation,validateEmail,validateStrEmpty,validatePhoneNumber} from "../Valid"
 
@@ -87,12 +87,8 @@ const FormUser = ({data,setDataItem,setDatas}) => {
         console.log(data)
         try{
             setIsLoading(true)
-            const res = await fetch(apiUserService.baseURL+"/users/update",{
-                method:'PUT',
-                headers:{
-                    'Content-Type':'application/json'
-                },
-                body:JSON.stringify({
+            const res = await customeFetch(apiUserService.baseURL+"/users/update",'authen','PUT',
+                JSON.stringify({
                     id:data.userId,
                     username: data.username,
                     password: "",
@@ -103,7 +99,7 @@ const FormUser = ({data,setDataItem,setDatas}) => {
                     roleId: 3,
                     isActive: true
                 })
-            })
+            )
             console.log(data)
             if(res.ok){
                 setIsLoading(false)

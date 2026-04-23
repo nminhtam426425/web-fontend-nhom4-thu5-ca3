@@ -3,7 +3,7 @@ import {Chart,Stat,DetailBranchBooking} from "../Dash"
 import SidebarTemp from "./SidebarTemp"
 import Header from './Header.js'
 import Modal from "../Form/Modal"
-import {apiUserService,useBranch} from "../index"
+import {apiUserService,useBranch,customeFetch} from "../index"
 import { useEffect, useState } from "react"
 
 
@@ -16,7 +16,7 @@ const MainHome = () => {
             try{
                 setIsLoading(true)
                 const url = (selectedBranchId) ? `/dashboard/${selectedBranchId}` : '/dashboard/1'
-                const res = await fetch(apiUserService.baseURL+url)
+                const res = await customeFetch(apiUserService.baseURL+url,'authen','GET')
                 if(res.ok){
                     const data = await res.json()
                     if(data.code === 200)
@@ -37,7 +37,7 @@ const MainHome = () => {
         <div className='main-content'>
             <Header/>
             <Stat data={dataOfDash}/>
-            <DetailBranchBooking data={dataOfDash}/>
+            <DetailBranchBooking dataOfDash={dataOfDash}/>
             <Chart dataRevenue={dataOfDash}/>
         </div>
         <Modal styleModal="loading" data={isLoading} setDataItem={setIsLoading} message="Vui lòng chờ"/>

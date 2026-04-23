@@ -1,5 +1,5 @@
 import './styleOfTable.css'
-import { apiUserService,useBranch } from '../index'
+import { apiUserService,customeFetch,useBranch } from '../index'
 import { FaLock,FaEdit} from "react-icons/fa"
 
 const RowTableUser = ({dataItem,index,setDataItem,setDataOfService,type}) => {
@@ -9,14 +9,12 @@ const RowTableUser = ({dataItem,index,setDataItem,setDataOfService,type}) => {
         if(window.confirm("Bạn chắc chắn muốn xóa không ?")){
             try{
                 setIsLoading(true)
-                const res = await fetch(apiUserService.baseURL+`/amenities/${dataItem.idAmenities}`,{
-                    method:'DELETE',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    }
-                })
+                let id = (dataItem.idAmenities) ? dataItem.idAmenities : dataItem.serviceId
+                let idName = (type === 'services') ? 'serviceId' : 'idAmenities'
+                let url = `/${type}/${id}`
+                const res = await customeFetch(apiUserService.baseURL+url,'authen','DELETE')
                 if(res.ok){
-                    setDataOfService( services => services.filter( item => item.idAmenities !== dataItem.idAmenities) )
+                    setDataOfService( services => services.filter( item => item[idName] !== dataItem[idName]))
                 }
                 setIsLoading(false)
             }

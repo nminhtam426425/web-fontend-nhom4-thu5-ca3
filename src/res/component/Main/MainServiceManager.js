@@ -2,7 +2,7 @@ import "./styleOfMain.css"
 import SidebarTemp from "./SidebarTemp"
 import TableAmenAndSerive from "../table/TableAmentAndService"
 import Header from "./Header"
-import {apiUserService,useBranch} from "../index"
+import {apiUserService,useBranch,customeFetch} from "../index"
 import Modal from "../Form/Modal"
 import { useEffect, useState } from "react"
 
@@ -16,7 +16,7 @@ const MainServiceManager = () => {
         const handleFetchService = async () => {
             try{
                 setIsLoading(true)
-                const res = await fetch(apiUserService.baseURL+`/${typeManagement}`)
+                const res = await customeFetch(apiUserService.baseURL+`/${typeManagement}`,'authen','GET')
                 if(res.ok){
                     const data = await res.json()
                     setDataOfService(data.data)

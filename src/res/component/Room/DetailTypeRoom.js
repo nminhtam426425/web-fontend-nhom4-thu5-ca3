@@ -21,7 +21,7 @@ const DetailTypeRoom = ({isClick,setRoom,setSrcImage,dataDetail,state,roomsOfTyp
     },[setRoomsOfType,dataDetail?.rooms])
 
     useEffect(()=>{
-        if(dataDetail)
+        if(dataDetail){
             setPrice({
                 basePrice:dataDetail.basePrice || 0,
                 sundayPrice:dataDetail.priceSundayNormal || 0,
@@ -29,6 +29,7 @@ const DetailTypeRoom = ({isClick,setRoom,setSrcImage,dataDetail,state,roomsOfTyp
                 peakSundayPrice:dataDetail.pricePeakSunday || 0,
                 priceHour:dataDetail.priceHour || 0
             })
+        }
     },[dataDetail,setPrice])
 
     useEffect( ()=>{
@@ -48,10 +49,6 @@ const DetailTypeRoom = ({isClick,setRoom,setSrcImage,dataDetail,state,roomsOfTyp
     return <>
             <section className="detail-section" style={{ display: isClick !== -1 ? 'block' : 'none'}}>
                 <hr/>
-                <div className="detail-header">
-                    <h3>Chi tiết loại phòng: <span id="selectedTypeName">{dataDetail?.typeName || ""}</span></h3>
-                    <p>Tổng số phòng thuộc loại: <b id="selectedTypeCount">{dataDetail?.totalRooms || 0}</b></p>
-                </div>
                 {
                     (state === 'detail')
                     ?

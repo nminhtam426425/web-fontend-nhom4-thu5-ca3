@@ -1,7 +1,7 @@
 import './styleOfTable.css'
 import RowTableBranch from "./RowTableBranch.js"
 import { FaPlus} from "react-icons/fa"
-import {useBranch,apiUserService} from "../index"
+import {useBranch,apiUserService, customeFetch} from "../index"
 import { useState } from 'react'
 
 const temp = {
@@ -32,7 +32,7 @@ const TableBranch = ({dataOfBranch,setDataItem,setDataOfBranch,dataOfBranchActiv
         if(isChange){
             try{
                 setIsLoading(true)
-                const res = await fetch(apiUserService.baseURL+'/branches/disabled')
+                const res = await customeFetch(apiUserService.baseURL+'/branches/disabled','authen','GET')
                 if(res.ok){
                     const data = await res.json()
                     setDataOfBranch(data)

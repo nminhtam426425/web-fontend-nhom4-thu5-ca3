@@ -1,6 +1,6 @@
 import './styleOfForm.css'
 import { useState,useEffect } from 'react'
-import {useBranch,apiUserService} from "../index"
+import {useBranch,apiUserService, customeFetch} from "../index"
 
 const FormService = ({data,setDataItem,setDatas}) => {
     const {setIsLoading} = useBranch()
@@ -43,17 +43,14 @@ const FormService = ({data,setDataItem,setDatas}) => {
             conditionUrl = (data?.serviceId) ?   `/services/${data.serviceId}` : `/services`
             method = (data?.serviceId) ? 'PUT' : 'POST'
             setIsLoading(true)
-            const res =  await fetch(apiUserService.baseURL+conditionUrl,{
-                method: method,  
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body:JSON.stringify({
+            const res =  await customeFetch(apiUserService.baseURL+conditionUrl,
+                'authen',
+                method,
+                JSON.stringify({
                     serviceId: service.codeService,
                     serviceName: service.name,
                     description: service.desc
-                })
-            })
+                }))
 
             if(res.ok){
                 if(data?.serviceId){

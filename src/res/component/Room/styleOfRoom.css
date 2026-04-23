@@ -54,6 +54,7 @@ img { border-radius: 4px; object-fit: cover; }
 
 .gallery-item {
     flex: 0 0 calc(33.333% - 10px); 
+    /* flex: 0 0 calc(50% - 10px);  */
     min-width: 0;
 }
 

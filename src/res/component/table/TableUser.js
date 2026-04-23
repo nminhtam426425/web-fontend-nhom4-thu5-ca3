@@ -1,6 +1,6 @@
 import './styleOfTable.css'
 import RowTableUser from "./RowTableUser.js"
-import {apiUserService,useBranch} from "../index.js"
+import {apiUserService,customeFetch,useBranch} from "../index.js"
 import { useState } from 'react'
 import { FaPlus} from "react-icons/fa"
 
@@ -13,16 +13,20 @@ const temp = {
     address: "HCM",
     add:true
 }
-const TableUser = ({dataOfUser,setDataItem,setDataOfUser,dataOfUserActive,setDataOfUserActive,setDetailOfUser,setIsClick,setUserForRender,itemPerPage,
-    setTotalPage,currentPage}) => {
+const TableUser = ({userForRender,setDataItem,setDataOfUser,dataOfUserActive,setDataOfUserActive,setDetailOfUser,setIsClick,setUserForRender,itemPerPage,
+    setTotalPage,dataOfUser,setCurrentPage,currentPage}) => {
 
     const props = {
+            dataOfUser,
+            userForRender,
             setDataItem,
             setDataOfUser,
             setDataOfUserActive,
             setDetailOfUser,
             setIsClick,
-            setUserForRender
+            setUserForRender,
+            setTotalPage,
+            setCurrentPage
     }
     const {setIsLoading} = useBranch()
     const [userDisable,setUserDisable] = useState(false)
@@ -34,21 +38,12 @@ const TableUser = ({dataOfUser,setDataItem,setDataOfUser,dataOfUserActive,setDat
         if(isChange){
             try{
                 setIsLoading(true)
-                const res = await fetch(apiUserService.baseURL+'/users/disabled')
+                const res = await customeFetch(apiUserService.baseURL+'/users/disabled','authen','GET')
                 if(res.ok){
                     const data = await res.json()
                     if(data.code===1001){
                         setDataOfUser(data.data)
-                        setUserForRender(data.data)
-                        let totalPageTemp = data.data.length
-                        if(totalPageTemp !== 0){
-                            if(totalPageTemp%itemPerPage === 0)
-                                setTotalPage(totalPageTemp/itemPerPage)
-                            else
-                                setTotalPage(Math.floor(totalPageTemp/itemPerPage)+1)
-                        }
-                        else
-                            setTotalPage(0)
+                        setCurrentPage(1)
                     }
                 }
                 setIsLoading(false)
@@ -60,18 +55,6 @@ const TableUser = ({dataOfUser,setDataItem,setDataOfUser,dataOfUserActive,setDat
         }
         else{
             setDataOfUser(dataOfUserActive)
-            let totalPageTemp = dataOfUserActive.length
-            if(totalPageTemp !== 0){
-                if(totalPageTemp%itemPerPage === 0)
-                    setTotalPage(totalPageTemp/itemPerPage)
-                else
-                    setTotalPage(Math.floor(totalPageTemp/itemPerPage)+1)
-                    const startIndex = (currentPage-1) * itemPerPage
-                    const endIndex = startIndex + itemPerPage
-                    setUserForRender(dataOfUserActive.slice(startIndex,endIndex))
-            }
-            else
-                setTotalPage(0)
         } 
     }
     const handleOpenModalStaff = () => {
@@ -102,7 +85,7 @@ const TableUser = ({dataOfUser,setDataItem,setDataOfUser,dataOfUserActive,setDat
                     </thead>
                     <tbody id="table-body">
                         {
-                            dataOfUser.map( (item,index) => <RowTableUser {...props} userItem={item} key={index} index={index} />)
+                            userForRender.map( (item,index) => <RowTableUser {...props} userItem={item} key={index} index={index} />)
                         }
                     </tbody>
                 </table>

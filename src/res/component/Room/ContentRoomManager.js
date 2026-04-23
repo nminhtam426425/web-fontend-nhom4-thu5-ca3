@@ -4,7 +4,7 @@ import RowTableTypeRoom from "./RowTableTypeRoom"
 import DetailTypeRoom from "./DetailTypeRoom"
 import Modal from "../Form/Modal"
 import { useEffect, useRef, useState } from "react"
-import {apiUserService,useBranch} from "../index"
+import {apiUserService,useBranch,customeFetch} from "../index"
 
 const ContentRoomManager = () => {
     const [isClick,setIsClick] = useState(-1)
@@ -36,7 +36,7 @@ const ContentRoomManager = () => {
             try{
                 let url = (selectedBranchId) ? `/roomtypes/by-branch/${selectedBranchId}` : '/roomtypes/by-branch/1'
                 setIsLoading(true)
-                const res = await fetch(apiUserService.baseURL+url)
+                const res = await customeFetch(apiUserService.baseURL+url,'authen','GET')
                 if(res.ok){
                     const data = await res.json()
                     setRoomTypes(data.data)
@@ -121,7 +121,7 @@ const ContentRoomManager = () => {
         <Modal styleModal="addTypeRoom" data={typeRoom} setDataItem={setTypeRoom} setDatas={setRoomTypes}/>
         <Modal styleModal="addRoom" data={room} setDataItem={setRoom} setDatas={setRoomsOfType}/>
         <Modal styleModal="showImage" data={srcImage} setDataItem={setSrcImage}/>
-        <Modal styleModal="loading" data={isLoading} setDataItem={setIsLoading} message="Đang xử lý dữ liệu, vui lòng chờ"/>
+        <Modal styleModal="loading" data={isLoading} setDataItem={setSrcImage}/>
    </>
 }
 export default ContentRoomManager

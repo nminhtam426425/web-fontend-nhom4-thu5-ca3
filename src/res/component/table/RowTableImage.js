@@ -1,23 +1,17 @@
-import {apiUserService,useBranch} from "../index"
+import {apiUserService,customeFetch,useBranch} from "../index"
 
-const RowTableImage = ({img,index,setRoomImage,dataDetail,setDataDetail,roomImage,setImgToUpload}) => {
+const RowTableImage = ({img,index,setRoomImage,dataDetail,setDataDetail,roomImage,handleDeleteImage}) => {
     const {setIsLoading} = useBranch()
-    const handleDeleteImage = async () => {
+    const handleDeleteImageAtTable = async () => {
         if(window.confirm("Bạn thực sự muốn xóa ảnh này ?")){
-            if(img.isNew){
-                setRoomImage( images => images.filter( item => item.imageId !== img.imageId))
-                setImgToUpload(images => images.filter( item => item.imageId !== img.imageId))
-                let temp = dataDetail
-                temp.images = roomImage.filter( item => item.imageId !== img.imageId)
-                setDataDetail(temp)
-            }
+            // xoa hinh chua up len cloud
+            if(img.isNew)
+                handleDeleteImage(img)
             // xoa hinh da upload tren cloud
             else{
                 try{
                     setIsLoading(true)
-                    const res = await fetch(apiUserService.baseURL+`/room-images/${img.imageId}`,{
-                        method:'DELETE'
-                    })
+                    const res = await customeFetch(apiUserService.baseURL+`/room-images/${img.imageId}`,'authen','DELETE')
                     if(res.ok){
                         const data = await res.text()
                         if(data === `Đã xóa ảnh có id ${img.imageId}`){
@@ -43,7 +37,7 @@ const RowTableImage = ({img,index,setRoomImage,dataDetail,setDataDetail,roomImag
             <td><img src={img?.url || img.imageUrl} alt={"and"+index} className="img-preview"/></td>
             <td>{img?.name || "anh "+(index+1) }</td>
             <td>
-                <button className="btn btn-delete" onClick={handleDeleteImage}>Xóa</button>
+                <button className="btn btn-delete" onClick={handleDeleteImageAtTable}>Xóa</button>
             </td>
         </tr>
     </>

@@ -1,9 +1,11 @@
 import './styleOfForm.css'
 import { useState } from "react"
 import { useNavigate } from "react-router-dom"
+import {apiUserService,customeFetch} from "../index"
 
 const FormLogin = () => {
     const navigate = useNavigate()
+    const [errorLogin,setErrorLogin] =useState("")
     const[authen,setAuthen] = useState({username:"",password:""})
     const handleInputlogin = (e) => {
         const {id,value} = e.target
@@ -12,14 +14,19 @@ const FormLogin = () => {
             [id]:value
         })
     }
-    const handleLogin = () => {
-        if(authen.username === "admin01" && authen.password === "123456"){
-            
-            localStorage.setItem("admin_id","50a3a35f-28c2-11f1-b8a4-d481d769f217")
-            navigate("/")
+
+    const handleLogin = async () => {
+        const res = await customeFetch(apiUserService.baseURL+'/auth/login','non-authen','POST',JSON.stringify(authen))
+        if(res.ok){
+            const data = await res.json()
+            if(data.token){
+                localStorage.setItem("token",data.token)
+                localStorage.setItem("refreshToken",data.refreshToken)
+                navigate("/")
+            }
+            else
+                setErrorLogin(data.data)
         }
-        else
-            alert("Fail to login !")
     }
 
     return <>
@@ -35,7 +42,9 @@ const FormLogin = () => {
                     <div className="input-group" style={{width: '100%'}}>
                         <input type="password" id="password" className="input-field" placeholder="" value={authen.password} onChange={handleInputlogin}/>
                         <label htmlFor="password" className="input-label">Password</label>
+                        <span className="validation" style={{marginTop: '10px'}}>{errorLogin}</span>
                     </div>
+
 
                     <div className="form-actions">
                         <button type="button" className="btn btn-save" onClick={handleLogin}>Đăng nhập</button>

@@ -1,6 +1,6 @@
 import "./styleOfTable.css"
 import { PrintAmountVND } from "../Dash"
-import {apiUserService} from "../index"
+import {apiUserService,customeFetch} from "../index"
 import { useEffect, useState } from "react"
 
 const checkForRenderColumnRoomNumber = (status) => {
@@ -14,7 +14,7 @@ const RowTableBooking = ({dataBookingItem,status,setDataItem}) => {
     useEffect( ()=>{
         const handleGetRoomNumber = async () => {
             try{
-                const res = await fetch(apiUserService.baseURL + `/bookings/detail/${dataBookingItem.bookingId}`)
+                const res = await customeFetch(apiUserService.baseURL + `/bookings/detail/${dataBookingItem.bookingId}`,'authen','GET')
                 if(res.ok){
                     const data = await res.json()
                     data.data.bookingCode = dataBookingItem.bookingCode

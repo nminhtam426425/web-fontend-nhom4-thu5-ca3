@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import {apiUserService,useBranch} from '../index'
+import {apiUserService,customeFetch,useBranch} from '../index'
 import {passValidation,validateStrEmpty, validateNoSpecialChars} from "../Valid"
 import "./styleOfForm.css"
 
@@ -48,18 +48,16 @@ const FormAddRoom = ({data,setDataItem,setDatas}) => {
             setIsLoading(true)
             const method = (data.id) ? 'PUT' : 'POST'
             const url = (data.id) ? `/rooms/${data.id}` : '/rooms'
-            const res = await fetch(apiUserService.baseURL + url,{
-                method:method,
-                headers:{
-                    "Content-Type":"application/json"
-                },
-                body:JSON.stringify({
+            const res = await customeFetch(apiUserService.baseURL + url,
+                'authen',
+                method,
+                JSON.stringify({
                     roomNumber: room.name,
                     typeId: typeRoomId,
                     status: "trống",
                     branchId: selectedBranchId
                 })
-            })
+            )
             if(res.ok){
                 const dataRes = await res.json()
                 if(method === 'POST'){

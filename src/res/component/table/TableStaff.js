@@ -1,7 +1,7 @@
 import './styleOfTable.css'
 import RowTableStaff from "./RowTableStaff.js"
 import {SelectBranch} from "../Dash"
-import {apiUserService,useBranch} from "../index.js"
+import {apiUserService,customeFetch,useBranch} from "../index.js"
 import { useState } from 'react'
 import { FaPlus} from "react-icons/fa"
 
@@ -32,7 +32,7 @@ const TableStaff = ({dataOfStaff,setDataItem,setDataOfStaff,dataOfStaffActive,se
         if(isChange){
             try{
                 setIsLoading(true)
-                const res = await fetch(apiUserService.baseURL+'/staff/disabled')
+                const res = await customeFetch(apiUserService.baseURL+'/staff/disabled','authen','GET')
                 if(res.ok){
                     const data = await res.json()
                     if(data.code===1001)

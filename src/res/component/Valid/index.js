@@ -49,9 +49,13 @@ function validateUsername(str) {
     return "Không chứa kí tự đặc biệt !"
 }
 
-function validateNumber(number){
+function validateNumber(str){
+    const regex1 = /^[0-9]{1,}$/
+    if(!regex1.test(str))
+        return "Chỉ nhập số !"
+    const number =  Number(str)
     if(number < 1)
-        return "Không hợp lê !"
+        return "Sức chứa không hợp lệ !"
     return ""
 }
 

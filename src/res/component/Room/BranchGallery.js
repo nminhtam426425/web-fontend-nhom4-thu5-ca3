@@ -19,6 +19,8 @@ const BranchGallery = ({setSrcImage,images}) => {
       const maxScroll = track.scrollWidth - viewport.offsetWidth;
   
       let newScroll = currentScroll - (direction * itemWidth);
+      
+      //console.log(newScroll,itemWidth,maxScroll,track.scrollWidth,viewport.offsetWidth)
   
       // Giới hạn biên
       if (newScroll < 0) newScroll = 0;

@@ -1,9 +1,13 @@
 import "./styleOfRoom.css"
 import BranchGallery from "./BranchGallery"
 
-const FormDetailTypeRoom = ({data,price,setSrcImage,roomImage}) => {
+const FormDetailTypeRoom = ({dataDetail,price,setSrcImage,roomImage}) => {
     return <>
-            <div className="detail-price">
+        <div className="detail-header">
+            <h3>Chi tiết loại phòng: <span id="selectedTypeName">{dataDetail?.typeName || ""}</span></h3>
+            <p>Tổng số phòng thuộc loại: <b id="selectedTypeCount">{dataDetail?.totalRooms || 0}</b></p>
+        </div>
+        <div className="detail-price">
             <div className="input-price">
                 <input type="text" id="price-1" className="input-field" placeholder="" value={price?.basePrice.toLocaleString('vi-VN') + 'đ'} readOnly/>
                 <label htmlFor="price-1" className="input-label">Giá ngày thường</label>
@@ -31,7 +35,7 @@ const FormDetailTypeRoom = ({data,price,setSrcImage,roomImage}) => {
         <div className="amenities-preview">
             <strong>Tiện nghi:</strong>
             {
-                data?.amenities.map( (item,index) => <label key={index} style={{marginRight:'10px'}} ><input type="checkbox" checked disabled/>{item.description}</label>)
+                dataDetail?.amenities?.map( (item,index) => <label key={index} style={{marginRight:'10px'}} ><input type="checkbox" checked disabled/>{item.description}</label>)
             }
         </div>
     </>

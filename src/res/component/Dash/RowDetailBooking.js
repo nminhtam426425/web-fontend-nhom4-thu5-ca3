@@ -1,14 +1,14 @@
 const RowDetailBooking = ({dataOfRow}) => {
     let classForStatus = "status-badge"
     classForStatus+=" "
-    classForStatus+=dataOfRow.status.toLowerCase()
+    classForStatus+=dataOfRow.status === 'chờ xác nhận' ? 'pending' : 'confirmed'
 
     return <>
          <tr>
-            <td><strong>{dataOfRow.name}</strong></td>
-            <td>{dataOfRow.room}</td>
-            <td>{dataOfRow.date}</td>
-            <td><span className={classForStatus}> {dataOfRow.status === 'Confirmed' ? 'Đã xác nhận' : 'Chờ xử lý'}</span></td>
+            <td><strong>{dataOfRow.fullName}</strong></td>
+            <td>{dataOfRow.roomTypeName}</td>
+            <td>{dataOfRow.checkIn}</td>
+            <td><span className={classForStatus}> {dataOfRow.status}</span></td>
         </tr>
     </>
 }

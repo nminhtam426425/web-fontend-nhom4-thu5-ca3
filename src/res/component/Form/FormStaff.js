@@ -1,6 +1,6 @@
 import './styleOfForm.css'
 import { useState,useEffect } from 'react'
-import {apiUserService,useBranch} from "../index"
+import {apiUserService,customeFetch,useBranch} from "../index"
 import {passValidation,validateEmail,validatePhoneNumber,validateUsername,validateStrEmpty} from "../Valid"
 
 const FormStaff = ({data,setDataItem,setDatas}) => {
@@ -93,14 +93,22 @@ const FormStaff = ({data,setDataItem,setDatas}) => {
     // }
     const handleUpdateUser = async () => {
         try{
+            console.log( {id:data.userId || data.id,
+                username: data.username,
+                password: "",
+                fullName: staff.fullname,
+                email: staff.email,
+                phone: staff.phone,
+                address: staff.address,
+                roleId: 2,
+                isActive: true
+            })
             setIsLoading(true)
-            const res = await fetch(apiUserService.baseURL+"/users/update",{
-                method:'PUT',
-                headers:{
-                    'Content-Type':'application/json'
-                },
-                body:JSON.stringify({
-                    id:data.userId,
+            const res = await customeFetch(apiUserService.baseURL+"/users/update",
+                'authen',
+                'PUT',
+                JSON.stringify({
+                    id:data.userId || data.id,
                     username: data.username,
                     password: "",
                     fullName: staff.fullname,
@@ -110,10 +118,8 @@ const FormStaff = ({data,setDataItem,setDatas}) => {
                     roleId: 2,
                     isActive: true
                 })
-            })
-            console.log(data)
+            )
             if(res.ok){
-                setIsLoading(false)
                 const data = await res.json()
                 if(data.code === 1001){
                     setDatas( staffs => staffs.map( item => {
@@ -128,8 +134,7 @@ const FormStaff = ({data,setDataItem,setDatas}) => {
                     setDataItem(null)
                 }
             }
-            else
-                setIsLoading(false)
+            setIsLoading(false)
         }
         catch(err){
             setIsLoading(false)
@@ -149,7 +154,7 @@ const FormStaff = ({data,setDataItem,setDatas}) => {
                     </div> */}
 
                     <div className="input-group" style={{width:'100%'}}>
-                        <input type="text" id="username" className="input-field" placeholder="" value={staff.username} readOnly/>
+                        <input type="text" id="username" className="input-field" placeholder="" value={staff.username} readOnly onChange={handleInputChange}/>
                         <label htmlFor="username" className="input-label">Tên đăng nhập</label>
                         <span className="validation">{errorStaff.username}</span>
                     </div>

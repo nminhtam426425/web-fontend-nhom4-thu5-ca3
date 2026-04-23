@@ -4,7 +4,7 @@ import ProtectedRoute from './res/ProtectRoute'
 import './index.css'
 
 function App() {
-  const routers = [
+  const routersPrivate = [
     {
       path:'/',
       element:Home
@@ -44,7 +44,7 @@ function App() {
       <Route path="/login" element={<Login />} />
       <Route element={<ProtectedRoute />}>
         {
-          routers.map((route,index) => 
+          routersPrivate.map((route,index) => 
             <Route key={index} path={route.path} element={<route.element/>}/>
           )
         }

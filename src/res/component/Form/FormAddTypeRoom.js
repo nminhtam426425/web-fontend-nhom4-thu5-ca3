@@ -1,8 +1,8 @@
 import { useEffect, useState,useRef } from "react"
 import "./styleOfForm.css"
-import { useBranch,apiUserService,apiCloudinary } from "../index"
+import { useBranch,apiUserService,apiCloudinary, customeFetch } from "../index"
 import RowTableImage from "../table/RowTableImage"
-import {passValidation,validateNoSpecialChars, validateNumber} from "../Valid"
+import {passValidation,validateNoSpecialChars} from "../Valid"
 
 const FormAddStyleRoom = ({setDataItem,setDatas}) => {
     const [amenities,setAmenities] = useState([])
@@ -17,34 +17,37 @@ const FormAddStyleRoom = ({setDataItem,setDatas}) => {
         priceHour:"",
         capacity:""
     })
-    const [errorPrice,setErrorPrice] =useState({
-        typeName: validateNoSpecialChars(price.typeName),
-        basePrice: validateNumber(price.basePrice),
-        sundayPrice: validateNumber(price.sundayPrice),
-        peakPrice: validateNumber(price.peakPrice),
-        peakSundayPrice: validateNumber(price.peakSundayPrice),
-        priceHour: validateNumber(price.priceHour),
-        capacity: validateNumber(price.capacity)
+    const [errorPrice,setErrorPrice] = useState({
+        typeName: validateNoSpecialChars("")
     })
     const inputImage = useRef(null)
-    const {setIsLoading} = useBranch()
+    const {setIsLoading,selectedBranchId} = useBranch()
+
+    const [focusField, setFocusField] = useState(null);
+
+    const formatCurrency = (val) => {
+        return Number(val).toLocaleString('vi-VN') + 'đ';
+    };
 
     const handleInputChange = (e) => {
-        const { id, value } = e.target
-        setPrice({
-            ...price,
-            [id]: value 
-        })
+        const { id } = e.target
+       
         if(id === 'typeName'){
+            const {value} = e.target;
+            setPrice({
+                ...price,
+                [id]: value 
+            })
             setErrorPrice({
                 ...errorPrice,
                 [id]: validateNoSpecialChars(value)
             })
         }
         else{
-            setErrorPrice({
-                ...errorPrice,
-                [id]: validateNumber( value !== "" ? Number(value) : 0)
+            const value = e.target.value.replace(/\D/g, '');
+            setPrice({
+                ...price,
+                [id]: value 
             })
         }
     }
@@ -53,7 +56,7 @@ const FormAddStyleRoom = ({setDataItem,setDatas}) => {
         const handleFetchAmenities = async ()  => {
             try{
                 setIsLoading(true)
-                const res = await fetch(apiUserService.baseURL+'/amenities')
+                const res = await customeFetch(apiUserService.baseURL+'/amenities','authen','GET')
                 if(res.ok){
                     const data  = await res.json()
                     setAmenities(data.data)
@@ -103,12 +106,10 @@ const FormAddStyleRoom = ({setDataItem,setDatas}) => {
             setIsLoading(true)
             let imagesToSave = await uploadToCloudinary(imageAdminChose)
 
-            const res = await fetch(apiUserService.baseURL+'/roomtypes',{
-                method:"POST",
-                headers:{
-                    'Content-Type':'application/json'
-                },
-                body:JSON.stringify({
+            const res = await customeFetch(apiUserService.baseURL+'/roomtypes',
+                'authen',
+                'POST',
+                JSON.stringify({
                     typeName:price.typeName,
                     descriptionRoom:1,
                     basePrice: price.basePrice,
@@ -118,14 +119,11 @@ const FormAddStyleRoom = ({setDataItem,setDatas}) => {
                     priceHour: price.priceHour,
                     capacity: Number(price.capacity),
                     images: imagesToSave,
-                    branchIds: [1],
+                    branchIds: [selectedBranchId],
                     amenities: amenitiesForCreate
                 })
-            })
-            console.log(amenitiesForCreate)
-            console.log(res)
+            )
            if(res.ok){
-                setIsLoading(false)
                 const data  = await res.json()
                 if(data){
                     setDatas( roomtypes => 
@@ -138,8 +136,7 @@ const FormAddStyleRoom = ({setDataItem,setDatas}) => {
                     setAmenities([])
                 }
             }
-            else
-               setIsLoading(false)
+            setIsLoading(false)
         }
         catch(err){
             setIsLoading(false)
@@ -155,6 +152,7 @@ const FormAddStyleRoom = ({setDataItem,setDatas}) => {
             files.forEach(file => {
                 if (validExtensions.includes(file.type)) {
                     const imageData = {
+                        isNew: true,
                         id: Date.now() + Math.random(),
                         name: file.name,
                         url: URL.createObjectURL(file),
@@ -170,7 +168,6 @@ const FormAddStyleRoom = ({setDataItem,setDatas}) => {
 
     const handleDeleteImage = (img) => {
         const imageToDelete = imageAdminChose.find(image => image.id === img.id)
-        console.log(imageToDelete.url)
         URL.revokeObjectURL(imageToDelete.url)
         setImageAdminChose( image => image.filter(image => image.id !== img.id))
     }
@@ -202,7 +199,6 @@ const FormAddStyleRoom = ({setDataItem,setDatas}) => {
                     <div className="input-price" style={{flex:1}}>
                         <input type="text" id="capacity" className="input-field" value={price.capacity} onChange={handleInputChange} placeholder=""/>
                         <label htmlFor="capacity" className="input-label">Sức chứa</label>
-                        <span className="validation">{errorPrice.capacity}</span>
                     </div>
                 </div>
                 <br/>
@@ -244,29 +240,49 @@ const FormAddStyleRoom = ({setDataItem,setDatas}) => {
                 </div>
                 <div className="detail-price">
                     <div className="input-price">
-                        <input type="text" id="basePrice" className="input-field" placeholder="" value={price?.basePrice} onChange={handleInputChange}/>
+                        <input type="text" id="basePrice" className="input-field"
+                                laceholder="" 
+                                value={focusField === 'basePrice' ? price.basePrice : formatCurrency(price.basePrice)}
+                                onFocus={() => setFocusField('basePrice')}
+                                onBlur={() => setFocusField(null)}
+                                onChange={(e) => handleInputChange(e)}/>
                         <label htmlFor="basePrice" className="input-label">Giá ngày thường</label>
-                        <span className="validation">{errorPrice.basePrice}</span>
                     </div>
                     <div className="input-price">
-                        <input type="text" id="sundayPrice" className="input-field" placeholder="" value={price?.sundayPrice} onChange={handleInputChange}/>
+                        <input type="text" id="sundayPrice" className="input-field" 
+                                placeholder="" 
+                                value={focusField === 'sundayPrice' ? price.sundayPrice : formatCurrency(price.sundayPrice)}
+                                onFocus={() => setFocusField('sundayPrice')}
+                                onBlur={() => setFocusField(null)}
+                                onChange={(e) => handleInputChange(e)}/>
                         <label htmlFor="sundayPrice" className="input-label">Giá chủ nhật</label>
-                        <span className="validation">{errorPrice.sundayPrice}</span>
                     </div>
                     <div className="input-price">
-                        <input type="text" id="peakPrice" className="input-field" placeholder="" value={price?.peakPrice} onChange={handleInputChange}/>
+                        <input type="text" id="peakPrice" className="input-field" 
+                                placeholder="" 
+                                value={focusField === 'peakPrice' ? price.peakPrice : formatCurrency(price.peakPrice)}
+                                onFocus={() => setFocusField('peakPrice')}
+                                onBlur={() => setFocusField(null)}
+                                onChange={(e) => handleInputChange(e)}/>
                         <label htmlFor="peakPrice" className="input-label">Giá mùa cao điểm</label>
-                        <span className="validation">{errorPrice.peakPrice}</span>
                     </div>
                     <div className="input-price">
-                        <input type="text" id="peakSundayPrice" className="input-field" placeholder="" value={price?.peakSundayPrice} onChange={handleInputChange}/>
+                        <input type="text" id="peakSundayPrice" className="input-field" 
+                                placeholder="" 
+                                value={focusField === 'peakSundayPrice' ? price.peakSundayPrice : formatCurrency(price.peakSundayPrice)}
+                                onFocus={() => setFocusField('peakSundayPrice')}
+                                onBlur={() => setFocusField(null)}
+                                onChange={(e) => handleInputChange(e)}/>
                         <label htmlFor="peakSundayPrice" className="input-label">Giá CN cao điểm</label>
-                        <span className="validation">{errorPrice.peakSundayPrice}</span>
                     </div> 
                     <div className="input-price">
-                        <input type="text" id="priceHour" className="input-field" placeholder="" value={price?.priceHour} onChange={handleInputChange}/>
+                        <input type="text" id="priceHour" className="input-field" 
+                                placeholder="" 
+                                value={focusField === 'priceHour' ? price.priceHour : formatCurrency(price.priceHour)}
+                                onFocus={() => setFocusField('priceHour')}
+                                onBlur={() => setFocusField(null)}
+                                onChange={(e) => handleInputChange(e)}/>
                         <label htmlFor="priceHour" className="input-label">Giá thuê giờ</label>
-                        <span className="validation">{errorPrice.priceHour}</span>
                     </div>
                 </div>
                 <button type="submit" className="btn btn-primary" 

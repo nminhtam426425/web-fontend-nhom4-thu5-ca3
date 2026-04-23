@@ -1,6 +1,7 @@
 import './styleOfForm.css'
 import { useState,useEffect } from 'react'
-import {apiUserService,useBranch} from "../index"
+import {apiUserService,customeFetch,useBranch} from "../index"
+import {passValidation,validateStrEmpty} from "../Valid"
 
 const FormAmenities = ({data,setDataItem,setDatas}) => {
     const {setIsLoading} = useBranch()
@@ -10,12 +11,18 @@ const FormAmenities = ({data,setDataItem,setDatas}) => {
     const [service, setService] = useState({
         name: ""
     })
+    const [errorrService, setErrorService] = useState({
+        name: validateStrEmpty(data?.description || "")
+    })
 
     useEffect(() => {
         if (data) {
             setService({
                 name: data.description || ""
             });
+            setErrorService({
+                name: validateStrEmpty(data.description || "")
+            })
         } else {
             // Nếu dataEdit trống (sau khi lưu xong), reset form về rỗng
             setService({ name: "" });
@@ -28,6 +35,10 @@ const FormAmenities = ({data,setDataItem,setDatas}) => {
             ...service,
             [id]: value 
         })
+        setErrorService({
+            ...errorrService,
+            [id]: validateStrEmpty(value)
+        })
     }
 
     const handleAddBranch = async () => {
@@ -38,14 +49,7 @@ const FormAmenities = ({data,setDataItem,setDatas}) => {
             conditionUrl = (data?.idAmenities) ?   `/amenities/${data.idAmenities}` : `/amenities`
             method = (data?.idAmenities) ? 'PUT' : 'POST'
             setIsLoading(true)
-            const res =  await fetch(apiUserService.baseURL+conditionUrl,{
-                method: method,  
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body:JSON.stringify({description:service.name})
-            })
-
+            const res =  await customeFetch(apiUserService.baseURL+conditionUrl,'authen',method,JSON.stringify({description:service.name}))
             if(res.ok){
                 setIsLoading(false)
                 if(data?.idAmenities){
@@ -59,7 +63,7 @@ const FormAmenities = ({data,setDataItem,setDatas}) => {
                 }
                 else{
                     const data = await res.json()
-                    setDatas( service => [...service,data])
+                    setDatas( service => [...service,data.data])
                     setDataItem(null)
                 }
             }
@@ -80,10 +84,16 @@ const FormAmenities = ({data,setDataItem,setDatas}) => {
                 <div className="input-group" style={{width: '100%'}}>
                     <input type="text" id="name" className="input-field" placeholder="" value={service.name} onChange={handleInputChange}/>
                     <label htmlFor="name" className="input-label">Tên tiện ích</label>
+                    <span className="validation">{errorrService.name}</span>
                 </div>
 
                 <div className="form-actions">
-                    <button type="button" className="btn btn-save" onClick={handleAddBranch}>Lưu</button>
+                    <button type="button" className="btn btn-save" 
+                            onClick={handleAddBranch}
+                            style={{cursor: passValidation(errorrService) ? 'pointer' : 'not-allowed'}} 
+                            disabled={passValidation(errorrService) ? false : true}>
+                        Lưu
+                    </button>
                     <button type="button" className="btn btn-cancel" onClick={closeModal}>Hủy</button>
                 </div>
             </form>

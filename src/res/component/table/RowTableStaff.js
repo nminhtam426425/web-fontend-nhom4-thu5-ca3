@@ -1,5 +1,5 @@
 import './styleOfTable.css'
-import { apiUserService,useBranch } from '../index'
+import { apiUserService,customeFetch,useBranch } from '../index'
 import { 
     FaLock,FaEdit,FaUnlock
 } from "react-icons/fa"
@@ -29,12 +29,7 @@ const RowTableStaff = ({staffItem,index,setDataItem,setDataOfStaff,setDataOfStaf
     const handleHideStaff = async () => {
         try{
             setIsLoading(true)
-            const res = await fetch(apiUserService.baseURL+`/users/disable/${staffItem.userId}`,{
-                method:'PUT',
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            })
+            const res = await customeFetch(apiUserService.baseURL+`/users/disable/${staffItem.userId}`,'authen','PUT')
             if(res.ok){
                 const data = await res.json()
                 if(data.code === 1001){
@@ -53,12 +48,7 @@ const RowTableStaff = ({staffItem,index,setDataItem,setDataOfStaff,setDataOfStaf
     const handleOpenStaff = async () => {
         try{
             setIsLoading(true)
-            const res = await fetch(apiUserService.baseURL+`/staff/enable/${staffItem.userId}`,{
-                method:'PUT',
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            })
+            const res = await customeFetch(apiUserService.baseURL+`/staff/enable/${staffItem.userId}`,'authen','PUT')
             if(res.ok){
                 setIsLoading(false)
                 const data = await res.json()

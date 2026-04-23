@@ -1,5 +1,5 @@
 import "./styleOfRoom.css"
-import {apiUserService,useBranch} from "../index"
+import {apiUserService,customeFetch,useBranch} from "../index"
 
 const RowTableRoomOfType = ({data,setRoom,setRoomsOfType}) => {
     const {setIsLoading} = useBranch()
@@ -10,9 +10,7 @@ const RowTableRoomOfType = ({data,setRoom,setRoomsOfType}) => {
         if(window.confirm("Bạn có muốn xóa phòng này ?")){
             try{
                 setIsLoading(true)
-                const res = await fetch(apiUserService.baseURL+`/rooms/${data?.id}`,{
-                    method:'DELETE'
-                })
+                const res = await customeFetch(apiUserService.baseURL+`/rooms/${data?.id}`,'authen','DELETE')
                 if(res.ok){
                     const dataRes = await res.text()
                     if(dataRes === `Xóa phòng có id ${data.id} thành công!`){

@@ -4,7 +4,8 @@ import { useNavigate } from "react-router-dom"
 const Header = () => {
     const navigate = useNavigate()
     const handleLogout = () => {
-        localStorage.removeItem('admin_id')
+        localStorage.removeItem('token')
+        localStorage.removeItem('refreshToken')
         navigate("/login")
     }
     return <>
@@ -16,7 +17,7 @@ const Header = () => {
 
                 <div className="menu-container">
                     <div className="profile-header">
-                        <h2 className="user-name">Tam Nguyen</h2>
+                        <h2 className="user-name">Admin Nguyễn</h2>
                         <p className="user-sub">Your personal information and settings.</p>
                         
                         <svg className="avatar-bg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1">

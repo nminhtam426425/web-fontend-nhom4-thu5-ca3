@@ -11,7 +11,6 @@ const MainRoomManager = () => {
             <ContentRoomManager/>
         </div>
     </div>
-   
 }
 
 export default MainRoomManager
